@@ -1,6 +1,6 @@
 ﻿namespace Body4U.Domain.Models
 {
-    public class ModelsData
+    public class ModelDatas
     {
         public class Article
         {

@@ -5,7 +5,7 @@
     using System;
     using Xunit;
 
-    using static Body4U.Domain.Models.ModelsData.Trainer;
+    using static Body4U.Domain.Models.ModelDatas.Trainer;
 
     public class TrainerSpecs
     {

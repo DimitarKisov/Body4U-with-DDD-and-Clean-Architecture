@@ -5,7 +5,7 @@
     using System;
     using Xunit;
 
-    using static Body4U.Domain.Models.ModelsData.Article;
+    using static Body4U.Domain.Models.ModelDatas.Article;
 
     public class ArticleSpecs
     {

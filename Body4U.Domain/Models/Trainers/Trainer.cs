@@ -9,7 +9,7 @@
 
     using static Body4U.Domain.Models.ModelContants.Trainer;
 
-    public class Trainer : Entity<int>
+    public class Trainer : Entity<int>, IAggregateRoot
     {
         private readonly HashSet<Article> articles;
         private readonly HashSet<TrainerImage> trainerImages;
@@ -69,6 +69,7 @@
 
             this.Bio = bio;
             Modification(userId);
+
             return this;
         }
 
@@ -78,6 +79,7 @@
 
             this.ShortBio = shortBio;
             Modification(userId);
+
             return this;
         }
 
@@ -87,6 +89,7 @@
 
             this.FacebookUrl = facebookUrl;
             Modification(userId);
+
             return this;
         }
 
@@ -96,6 +99,7 @@
 
             this.InstagramUrl = instagramUrl;
             Modification(userId);
+
             return this;
         }
 
@@ -105,18 +109,21 @@
 
             this.YoutubeChannelUrl = youtubeChannelUrl;
             Modification(userId);
+
             return this;
         }
 
         public Trainer ChangeVisibility()
         {
             this.IsReadyToVisualize = !this.IsReadyToVisualize;
+
             return this;
         }
 
         public Trainer ChangeOpportunityToWrite()
         {
             this.IsReadyToWrite = !this.IsReadyToWrite;
+
             return this;
         }
 

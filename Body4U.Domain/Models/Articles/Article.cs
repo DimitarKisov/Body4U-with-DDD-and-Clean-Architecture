@@ -50,6 +50,7 @@
 
             this.Title = title;
             Modification(userId);
+
             return this;
         }
 
@@ -60,6 +61,7 @@
 
             this.Image = image;
             Modification(userId);
+
             return this;
         }
 
@@ -69,6 +71,7 @@
 
             this.Content = content;
             Modification(userId);
+
             return this;
         }
 
