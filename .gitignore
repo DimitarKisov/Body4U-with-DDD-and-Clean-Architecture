@@ -357,4 +357,3 @@ appsettings.Production.json
 appsettings.json
 *.min.css
 *.min.js
-/*.sln
