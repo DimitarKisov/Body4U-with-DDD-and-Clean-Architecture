@@ -1,5 +1,6 @@
 namespace Body4U.Startup
 {
+    using Body4U.Domain;
     using Body4U.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,7 @@ namespace Body4U.Startup
 
         public void ConfigureServices(IServiceCollection services)
             => services
+                .AddDomain()
                 .AddInfrastructure(this.Configuration)
                 .AddControllers();
 

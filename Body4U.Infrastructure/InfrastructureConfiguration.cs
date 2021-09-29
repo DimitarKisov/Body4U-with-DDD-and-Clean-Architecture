@@ -1,6 +1,8 @@
 ﻿namespace Body4U.Infrastructure
 {
+    using Body4U.Application.Contracts;
     using Body4U.Infrastructure.Persistence;
+    using Body4U.Infrastructure.Persistence.Repositories;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,7 @@
                     .UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection"),
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext)
-                            .Assembly.FullName)));
+                            .Assembly.FullName)))
+            .AddTransient(typeof(IRepository<>), typeof(DataRepository<>));
     }
 }

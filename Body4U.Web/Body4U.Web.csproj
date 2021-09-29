@@ -9,5 +9,9 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Body4U.Application\Body4U.Application.csproj" />
+  </ItemGroup>
     
 </Project>

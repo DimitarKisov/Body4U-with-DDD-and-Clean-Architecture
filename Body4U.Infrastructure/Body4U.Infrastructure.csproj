@@ -31,11 +31,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Body4U.Domain\Body4U.Domain.csproj" />
+    <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Persistence\Migrations\" />
+    <ProjectReference Include="..\Body4U.Application\Body4U.Application.csproj" />
   </ItemGroup>
 
 </Project>
