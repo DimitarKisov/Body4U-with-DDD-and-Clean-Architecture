@@ -15,5 +15,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Body4U.Infrastructure\Body4U.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 </Project>

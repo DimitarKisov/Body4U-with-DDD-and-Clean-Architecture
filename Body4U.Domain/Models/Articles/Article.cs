@@ -23,6 +23,23 @@
             this.Sources = sources;
             this.ArticleType = articleType;
             this.CreatedOn = DateTime.Now;
+            this.ModifiedOn = null;
+        }
+
+        private Article(
+            string title,
+            byte[] image,
+            string content,
+            string sources)
+        {
+            this.Title = title;
+            this.Image = image;
+            this.Content = content;
+            this.Sources = sources;
+            this.CreatedOn = DateTime.Now;
+            this.ModifiedOn = null;
+
+            this.ArticleType = default!;
         }
 
         public string Title { get; private set; }
@@ -38,8 +55,6 @@
         public DateTime? ModifiedOn { get; private set; }
 
         public string ModifiedBy { get; private set; } = default!;
-
-        //public ApplicationUser ApplicationUser { get; private set; }
 
         public ArticleType ArticleType { get; private set; }
 

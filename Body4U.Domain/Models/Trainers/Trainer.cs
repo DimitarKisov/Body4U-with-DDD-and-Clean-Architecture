@@ -30,6 +30,7 @@
             this.InstagramUrl = instagramUrl;
             this.YoutubeChannelUrl = youtubeChannelUrl;
             this.CreatedOn = DateTime.Now;
+            this.ModifiedOn = null;
 
             this.articles = new HashSet<Article>();
             this.trainerImages = new HashSet<TrainerImage>();
@@ -46,9 +47,9 @@
 
         public string YoutubeChannelUrl { get; private set; }
 
-        public bool IsReadyToVisualize { get; private set; } = default;
+        public bool IsReadyToVisualize { get; private set; }
 
-        public bool IsReadyToWrite { get; private set; } = default;
+        public bool IsReadyToWrite { get; private set; }
 
         public DateTime CreatedOn { get; }
 
