@@ -2,6 +2,16 @@
 {
     public class ModelContants
     {
+        public class User
+        {
+            public const int MinFirstNameLength = 3;
+            public const int MaxFirstNameLength = 50;
+            public const int MinLastNameLength = 3;
+            public const int MaxLastNameLength = 50;
+            public const int MinAge = 5;
+            public const int MaxAge = 80;
+        }
+
         public class Article
         {
             public const int MinTitleLength = 5;

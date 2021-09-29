@@ -30,6 +30,7 @@ namespace Body4U.Startup
             app
                 .UseHttpsRedirection()
                 .UseRouting()
+                .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                    endpoints.MapControllers());
