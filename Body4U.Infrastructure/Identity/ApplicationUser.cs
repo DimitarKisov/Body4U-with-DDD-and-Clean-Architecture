@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Infrastructure.Identity
 {
     using Body4U.Application.Features.Identity;
+    using Body4U.Domain.Common;
     using Body4U.Domain.Exceptions;
     using Body4U.Domain.Models.Trainers;
     using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,7 @@
     {
         internal ApplicationUser(
             string email,
+            string phoneNumber,
             string firstName,
             string lastName,
             int age,
@@ -20,6 +22,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Email = email;
+            this.PhoneNumber = phoneNumber;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Age = age;
@@ -37,6 +40,7 @@
 
         private ApplicationUser(
             string email,
+            string phoneNumber,
             string firstName,
             string lastName,
             int age,
@@ -46,6 +50,7 @@
         {
             this.Id = Guid.NewGuid().ToString();
             this.Email = email;
+            this.PhoneNumber = phoneNumber;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Age = age;

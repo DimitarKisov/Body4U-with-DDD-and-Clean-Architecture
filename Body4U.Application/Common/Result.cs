@@ -27,6 +27,9 @@ namespace Body4U.Application.Common
         public static Result Failure(IEnumerable<string> errors)
             => new Result(false, errors.ToList());
 
+        public static Result Failure(string error)
+            => new Result(false, new List<string> { error });
+
         public static implicit operator Result(string error)
             => Failure(new List<string> { error });
 
@@ -59,6 +62,9 @@ namespace Body4U.Application.Common
 
         public new static Result<TData> Failure(IEnumerable<string> errors)
             => new Result<TData>(false, default!, errors.ToList());
+
+        public new static Result<TData> Failure(string error)
+            => new Result<TData>(false, default!, new List<string> { error });
 
         public static implicit operator Result<TData>(string error)
             => Failure(new List<string> { error });
