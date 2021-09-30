@@ -27,12 +27,41 @@
             this.Gender = gender;
             this.IsDisabled = false;
             this.CreatedOn = DateTime.Now;
+            this.ModifiedOn = null;
+            this.ModifiedBy = null;
 
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
-        
+
+        private ApplicationUser(
+            string email,
+            string firstName,
+            string lastName,
+            int age,
+            byte[] profilePicture
+            )
+            : base(email)
+        {
+            this.Id = Guid.NewGuid().ToString();
+            this.Email = email;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Age = age;
+            this.ProfilePicture = profilePicture;
+            this.IsDisabled = false;
+            this.CreatedOn = DateTime.Now;
+            this.ModifiedOn = null;
+            this.ModifiedBy = null;
+
+            this.Gender = default!;
+
+            this.Roles = new HashSet<IdentityUserRole<string>>();
+            this.Claims = new HashSet<IdentityUserClaim<string>>();
+            this.Logins = new HashSet<IdentityUserLogin<string>>();
+        }
+
         public string FirstName { get; private set; }
 
         public string LastName { get; private set; }
@@ -49,7 +78,7 @@
 
         public DateTime? ModifiedOn { get; private set; }
 
-        public string ModifiedBy { get; private set; } = default!;
+        public string? ModifiedBy { get; private set; }
 
         public Trainer? Trainer { get; private set; }
 

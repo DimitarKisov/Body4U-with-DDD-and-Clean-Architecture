@@ -30,13 +30,38 @@
                 .IsRequired();
 
             builder
-                .Property(x => x.Gender)
-                .IsRequired();
+                .OwnsOne(x => x.Gender, y =>
+                  {
+                      y.WithOwner();
+
+                      y.Property(z => z.Value);
+                  });
 
             builder
                 .HasOne(x => x.Trainer)
                 .WithOne()
                 .HasForeignKey<ApplicationUser>("TrainerId")
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(e => e.Claims)
+                .WithOne()
+                .HasForeignKey("ApplicationUserId")
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(e => e.Logins)
+                .WithOne()
+                .HasForeignKey("ApplicationUserId")
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasMany(e => e.Roles)
+                .WithOne()
+                .HasForeignKey("ApplicationUserId")
+                .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

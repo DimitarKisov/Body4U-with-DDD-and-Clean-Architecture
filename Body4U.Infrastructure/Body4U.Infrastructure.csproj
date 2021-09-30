@@ -8,18 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Persistence\Migrations\20210929131231_Initial.cs" />
-    <Compile Remove="Persistence\Migrations\20210929131231_Initial.Designer.cs" />
-    <Compile Remove="Persistence\Migrations\20210929131330_Initial.cs" />
-    <Compile Remove="Persistence\Migrations\20210929131330_Initial.Designer.cs" />
-    <Compile Remove="Persistence\Migrations\20210929132714_Initial.cs" />
-    <Compile Remove="Persistence\Migrations\20210929132714_Initial.Designer.cs" />
-    <Compile Remove="Persistence\Migrations\20210929132821_Initial.cs" />
-    <Compile Remove="Persistence\Migrations\20210929132821_Initial.Designer.cs" />
-    <Compile Remove="Persistence\Migrations\20210929132924_Initial.cs" />
-    <Compile Remove="Persistence\Migrations\20210929132924_Initial.Designer.cs" />
-    <Compile Remove="Persistence\Migrations\20210929133042_Initial.cs" />
-    <Compile Remove="Persistence\Migrations\20210929133042_Initial.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210930084646_InitialDomainModelsAndIdentity.cs" />
+    <Compile Remove="Persistence\Migrations\20210930084646_InitialDomainModelsAndIdentity.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210930084824_InitialDomainModelsAndIdentity.cs" />
+    <Compile Remove="Persistence\Migrations\20210930084824_InitialDomainModelsAndIdentity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +22,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

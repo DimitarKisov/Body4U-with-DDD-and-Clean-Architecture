@@ -7,7 +7,7 @@
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
 
-    internal class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    internal class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

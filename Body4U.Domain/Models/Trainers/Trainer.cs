@@ -31,6 +31,7 @@
             this.YoutubeChannelUrl = youtubeChannelUrl;
             this.CreatedOn = DateTime.Now;
             this.ModifiedOn = null;
+            this.ModifiedBy = null;
 
             this.articles = new HashSet<Article>();
             this.trainerImages = new HashSet<TrainerImage>();
@@ -55,7 +56,7 @@
 
         public DateTime? ModifiedOn { get; private set; }
 
-        public string ModifiedBy { get; private set; } = default!;
+        public string? ModifiedBy { get; private set; }
 
         public IEnumerable<Article> Articles => this.articles.ToList().AsReadOnly();
 

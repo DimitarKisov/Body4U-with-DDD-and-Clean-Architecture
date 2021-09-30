@@ -30,8 +30,7 @@
                     .UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection"),
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext)
-                            .Assembly.FullName)))
-            .AddTransient(typeof(IRepository<>), typeof(DataRepository<>));
+                            .Assembly.FullName)));
 
         internal static IServiceCollection AddRepositories(this IServiceCollection services)
             => services

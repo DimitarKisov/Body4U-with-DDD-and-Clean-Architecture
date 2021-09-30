@@ -2,6 +2,7 @@ namespace Body4U.Startup
 {
     using Body4U.Domain;
     using Body4U.Infrastructure;
+    using Body4U.Web;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ namespace Body4U.Startup
             => services
                 .AddDomain()
                 .AddInfrastructure(this.Configuration)
+                .AddWebComponents()
                 .AddControllers();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

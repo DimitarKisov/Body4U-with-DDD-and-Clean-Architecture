@@ -1,7 +1,6 @@
 ﻿namespace Body4U.Infrastructure.Persistence.Configurations
 {
     using Body4U.Domain.Models.Articles;
-    using Body4U.Domain.Models.Trainers;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

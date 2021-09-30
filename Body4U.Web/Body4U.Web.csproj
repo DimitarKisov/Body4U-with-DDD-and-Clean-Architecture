@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.19" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Body4U.Application\Body4U.Application.csproj" />
   </ItemGroup>
     
