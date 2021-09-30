@@ -1,7 +1,6 @@
 ﻿namespace Body4U.Infrastructure.Identity
 {
     using Body4U.Application.Features.Identity;
-    using Body4U.Domain.Common;
     using Body4U.Domain.Exceptions;
     using Body4U.Domain.Models.Trainers;
     using Microsoft.AspNetCore.Identity;
@@ -16,7 +15,7 @@
             string firstName,
             string lastName,
             int age,
-            byte[] profilePicture,
+            byte[]? profilePicture,
             Gender gender)
             : base(email)
         {
@@ -44,7 +43,7 @@
             string firstName,
             string lastName,
             int age,
-            byte[] profilePicture
+            byte[]? profilePicture
             )
             : base(email)
         {

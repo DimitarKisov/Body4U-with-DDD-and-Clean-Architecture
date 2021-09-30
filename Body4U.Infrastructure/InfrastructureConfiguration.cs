@@ -5,11 +5,16 @@
     using Body4U.Infrastructure.Identity;
     using Body4U.Infrastructure.Persistence;
     using Body4U.Infrastructure.Persistence.Repositories;
+    using Body4U.Infrastructure.Persistence.Seeders;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Infrastructure;
+    using Microsoft.EntityFrameworkCore.Storage;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using System;
+    using System.Linq;
     using System.Text;
 
     public static class InfrastructureConfiguration
@@ -20,9 +25,10 @@
             => services
                 .AddDatabase(configuration)
                 .AddRepositories()
-                .AddIdentity(configuration);
+                .AddIdentity(configuration)
+                .SeedIdentityData(configuration);
 
-        private static IServiceCollection AddDatabase(
+        internal static IServiceCollection AddDatabase(
             this IServiceCollection services,
             IConfiguration configuration)
             => services
@@ -41,7 +47,7 @@
                     .AsMatchingInterface()
                     .WithTransientLifetime());
 
-        private static IServiceCollection AddIdentity(
+        internal static IServiceCollection AddIdentity(
             this IServiceCollection services,
             IConfiguration configuration)
         {
@@ -80,6 +86,38 @@
                 });
 
             services.AddTransient<IIdentityService, IdentityService>();
+
+            return services;
+        }
+
+        internal static IServiceCollection SeedIdentityData(this IServiceCollection services, IConfiguration configuration)
+        {
+            var serviceProvider = services.BuildServiceProvider();
+
+            using (var dbContext = (ApplicationDbContext)serviceProvider.GetService(typeof(ApplicationDbContext)))
+            {
+                if (!(dbContext.GetService<IDatabaseCreator>() as RelationalDatabaseCreator)!.Exists())
+                {
+                    dbContext.Database.Migrate();
+                }
+
+                if (!dbContext.Users.Any())
+                {
+                    using (var transaction = dbContext.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            new ApplicationDbContextSeeder(configuration).SeedAsync(dbContext, serviceProvider).GetAwaiter().GetResult();
+
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            //TODO: Log
+                        }
+                    }
+                }
+            }
 
             return services;
         }

@@ -12,6 +12,10 @@
     <Compile Remove="Persistence\Migrations\20210930084646_InitialDomainModelsAndIdentity.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20210930084824_InitialDomainModelsAndIdentity.cs" />
     <Compile Remove="Persistence\Migrations\20210930084824_InitialDomainModelsAndIdentity.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210930114918_Test.cs" />
+    <Compile Remove="Persistence\Migrations\20210930114918_Test.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210930131444_Test.cs" />
+    <Compile Remove="Persistence\Migrations\20210930131444_Test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
