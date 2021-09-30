@@ -1,5 +1,6 @@
 namespace Body4U.Startup
 {
+    using Body4U.Application;
     using Body4U.Domain;
     using Body4U.Infrastructure;
     using Body4U.Web;
@@ -18,6 +19,7 @@ namespace Body4U.Startup
         public void ConfigureServices(IServiceCollection services)
             => services
                 .AddDomain()
+                .AddApplication()
                 .AddInfrastructure(this.Configuration)
                 .AddWebComponents()
                 .AddControllers();
