@@ -5,6 +5,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     internal class ApplicationUserSeeder : ISeeder
@@ -28,33 +29,25 @@
 
         private static async Task SeedUserAsync(UserManager<ApplicationUser> userManager, string email, string phoneNumber, string firstName, string lastName, int age, string password)
         {
-            try
-            {
-                var user = await userManager.FindByEmailAsync(email);
+            var user = await userManager.FindByEmailAsync(email);
 
-                if (user == null)
+            if (user == null)
+            {
+                var newUser = new ApplicationUser(
+                    email,
+                    phoneNumber,
+                    firstName,
+                    lastName,
+                    age,
+                    null,
+                    Gender.Male);
+
+                var result = await userManager.CreateAsync(newUser, password);
+
+                if (!result.Succeeded)
                 {
-                    var newUser = new ApplicationUser(
-                        email,
-                        phoneNumber,
-                        firstName,
-                        lastName,
-                        age,
-                        null,
-                        Gender.Male);
-
-                    var result = await userManager.CreateAsync(newUser, password);
-
-                    if (!result.Succeeded)
-                    {
-                        
-                        //TODO: Log
-                    }
+                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
                 }
-            }
-            catch (Exception)
-            {
-                //TODO: Log
             }
         }
     }

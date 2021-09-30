@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using static Body4U.Application.Common.GlobalConstants.System;
@@ -20,22 +21,15 @@
 
         private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
         {
-            try
+            var role = await roleManager.FindByNameAsync(roleName);
+            if (role == null)
             {
-                var role = await roleManager.FindByNameAsync(roleName);
-                if (role == null)
-                {
-                    var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
+                var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
 
-                    if (!result.Succeeded)
-                    {
-                        //TODO: Log
-                    }
+                if (!result.Succeeded)
+                {
+                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
                 }
-            }
-            catch (Exception)
-            {
-                //TODO: Log
             }
         }
     }
