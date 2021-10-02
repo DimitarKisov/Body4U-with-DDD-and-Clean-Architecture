@@ -4,12 +4,13 @@ namespace Body4U.Startup
     using Body4U.Domain;
     using Body4U.Infrastructure;
     using Body4U.Web;
+    using Body4U.Startup.Extensions;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
+    
     public class Startup
     {
         public Startup(IConfiguration configuration) => this.Configuration = configuration;
@@ -22,13 +23,16 @@ namespace Body4U.Startup
                 .AddApplication()
                 .AddInfrastructure(this.Configuration)
                 .AddWebComponents()
+                .AddSwagger()
                 .AddControllers();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app
+                    .UseDeveloperExceptionPage()
+                    .UseSwagger();
             }
 
             app

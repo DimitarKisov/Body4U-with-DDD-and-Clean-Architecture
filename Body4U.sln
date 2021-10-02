@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Body4U.Domain", "Body4U.Domain\Body4U.Domain.csproj", "{942ABDBB-BDCC-4247-92E0-B729F9B512FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Body4U.Startup", "Body4U.Startup\Body4U.Startup.csproj", "{D150EED1-AA2F-4966-9BC5-FD78DB4FCC26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Body4U.Startup", "Body4U.Startup\Body4U.Startup.csproj", "{D150EED1-AA2F-4966-9BC5-FD78DB4FCC26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Body4U.Web", "Body4U.Web\Body4U.Web.csproj", "{27453A43-7B1F-4E0F-9F1B-3DEDC033A446}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Body4U.Web", "Body4U.Web\Body4U.Web.csproj", "{27453A43-7B1F-4E0F-9F1B-3DEDC033A446}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Body4U.Infrastructure", "Body4U.Infrastructure\Body4U.Infrastructure.csproj", "{2679424F-C328-4368-86B6-07551E41D292}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Body4U.Infrastructure", "Body4U.Infrastructure\Body4U.Infrastructure.csproj", "{2679424F-C328-4368-86B6-07551E41D292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Body4U.Application", "Body4U.Application\Body4U.Application.csproj", "{C9AB38D3-4EB1-4713-827C-4DEA59964153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Body4U.Application", "Body4U.Application\Body4U.Application.csproj", "{C9AB38D3-4EB1-4713-827C-4DEA59964153}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
