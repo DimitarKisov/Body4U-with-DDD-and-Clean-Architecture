@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Infrastructure.Persistence.Seeders
 {
     using Microsoft.Extensions.Configuration;
+    using Serilog;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -15,13 +16,13 @@
         {
             if (dbContext == null)
             {
-                //TODO: Log
+                Log.Information($"{nameof(ApplicationDbContextSeeder)}.{nameof(SeedAsync)} failed because of null dbContext");
                 return;
             }
 
             if (serviceProvider == null)
             {
-                //TODO: Log
+                Log.Information($"{nameof(ApplicationDbContextSeeder)}.{nameof(SeedAsync)} failed because of null serviceProvider");
                 return;
             }
 

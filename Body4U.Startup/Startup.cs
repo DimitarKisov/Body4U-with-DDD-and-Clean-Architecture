@@ -10,7 +10,8 @@ namespace Body4U.Startup
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    
+
+    #pragma warning disable CS1591
     public class Startup
     {
         public Startup(IConfiguration configuration) => this.Configuration = configuration;
@@ -44,4 +45,5 @@ namespace Body4U.Startup
                    endpoints.MapControllers());
         }
     }
+    #pragma warning restore CS1591
 }

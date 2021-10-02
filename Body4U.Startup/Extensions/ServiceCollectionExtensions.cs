@@ -6,6 +6,7 @@
     using System.IO;
     using System.Reflection;
 
+    #pragma warning disable CS1591
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services)
@@ -55,4 +56,5 @@
             return services;
         }
     }
+    #pragma warning restore CS1591
 }

@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
+    using Serilog;
 
     public class ValidationExceptionHandlerMiddleware
     {
@@ -26,7 +27,7 @@
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, ex);
-                //TODO: LogFile
+                Log.Error($"{nameof(ValidationExceptionHandlerMiddleware)}.{nameof(Invoke)}", ex);
             }
         }
 

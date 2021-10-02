@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Builder;
 
+    #pragma warning disable CS1591
     public static class ConfigureExtensions
     {
         public static IApplicationBuilder UseSwagger(this IApplicationBuilder app)
@@ -19,4 +20,5 @@
             return app;
         }
     }
+    #pragma warning restore CS1591
 }

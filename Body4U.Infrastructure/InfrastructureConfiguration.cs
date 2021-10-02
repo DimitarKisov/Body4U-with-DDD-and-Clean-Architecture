@@ -13,6 +13,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using Serilog;
     using System;
     using System.Linq;
     using System.Text;
@@ -111,9 +112,9 @@
 
                             transaction.Commit();
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
-                            //TODO: Log
+                            Log.Error($"{nameof(InfrastructureConfiguration)}.{nameof(SeedIdentityData)}", ex);
                         }
                     }
                 }

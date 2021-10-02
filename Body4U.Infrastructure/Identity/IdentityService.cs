@@ -35,18 +35,19 @@
                 gender);
 
             var result = await this.userManager.CreateAsync(user, command.Password);
-            if (result.Succeeded)
-            {
-                await this.userManager.AddToRoleAsync(user, UserRoleName);
-                return Result<IUser>.SuccessWith(user);
-            }
 
-            return Result<IUser>.Failure(RegistrationUnssuccesful);
+            return result.Succeeded ?
+                Result<IUser>.SuccessWith(user) : 
+                Result<IUser>.Failure(RegistrationUnssuccesful);
         }
 
         #region Private methods
         private Result<byte[]> ImageConverter(IFormFile file)
         {
+            if (file == null)
+            {
+                return Result<byte[]>.SuccessWith(new byte[0]);
+            }
             if (file != null && file.ContentType != "image/jpeg" && file.ContentType != "image/png")
             {
                 return Result<byte[]>.Failure(WrongImageFormat);
@@ -60,12 +61,10 @@
                 {
                     file.CopyTo(stream);
                     result = stream.ToArray();
-
-                    return Result<byte[]>.SuccessWith(result);
                 }
             }
 
-            return Result<byte[]>.Failure(EmptyFile);
+            return Result<byte[]>.SuccessWith(result);
         }
         #endregion
     }
