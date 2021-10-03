@@ -50,9 +50,7 @@
             private readonly IIdentityService identityService;
 
             public CreateUserCommandHandler(IIdentityService identityService)
-            {
-                this.identityService = identityService;
-            }
+                => this.identityService = identityService;
 
             public async Task<Result> Handle(CreateUserCommand command, CancellationToken cancellationToken)
             {

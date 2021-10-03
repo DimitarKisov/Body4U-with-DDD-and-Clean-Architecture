@@ -20,6 +20,8 @@
             public const string UnssuccesfulPasswordReset = "Неуспешно подновяване";
             public const string RegistrationUnssuccesful = "Sorry, your registration attempt was unsuccessful";
             public const string WrongRights = "Нямате права за това действие.";
+            public const string WrongUsernameOrPassword = "Wrong email or password.";
+            public const string Locked = "Account is locked.";
         }
 
         public class Trainer

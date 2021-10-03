@@ -4,7 +4,6 @@
     using Body4U.Application.Features.Identity;
     using Body4U.Infrastructure.Identity;
     using Body4U.Infrastructure.Persistence;
-    using Body4U.Infrastructure.Persistence.Repositories;
     using Body4U.Infrastructure.Persistence.Seeders;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
@@ -87,6 +86,7 @@
                 });
 
             services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
 
             return services;
         }

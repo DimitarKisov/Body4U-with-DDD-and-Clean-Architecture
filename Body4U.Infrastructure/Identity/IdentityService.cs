@@ -3,8 +3,10 @@
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
+    using Body4U.Application.Features.Identity.Commands.LoginUser;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using System;
     using System.IO;
     using System.Threading.Tasks;
 
@@ -14,10 +16,17 @@
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IJwtTokenGeneratorService jwtTokenGeneratorService;
 
-        public IdentityService(UserManager<ApplicationUser> userManager)
+        public IdentityService(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IJwtTokenGeneratorService jwtTokenGeneratorService)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.jwtTokenGeneratorService = jwtTokenGeneratorService;
         }
 
         public async Task<Result<IUser>> Register(CreateUserCommand command)
@@ -39,6 +48,33 @@
             return result.Succeeded ?
                 Result<IUser>.SuccessWith(user) : 
                 Result<IUser>.Failure(RegistrationUnssuccesful);
+        }
+
+        public async Task<Result<LoginOutputModel>> Login(LoginUserCommand command)
+        {
+            var user = await this.userManager.FindByEmailAsync(command.Email);
+            if (user == null)
+            {
+                return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+            }
+
+            var passwordValid = await this.userManager.CheckPasswordAsync(user, command.Password);
+            if (!passwordValid)
+            {
+                return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+            }
+
+            var result = await signInManager.PasswordSignInAsync(user, command.Password, command.RememberMe, user.LockoutEnabled);
+            if (result.Succeeded)
+            {
+                var token = this.jwtTokenGeneratorService.GenerateToken(user);
+
+                return Result<LoginOutputModel>.SuccessWith(new LoginOutputModel(token));
+            }
+
+            return user.LockoutEnabled && user.LockoutEnd != null && user.LockoutEnd.Value > DateTime.Now
+                    ? Result<LoginOutputModel>.Failure(Locked)
+                    : Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
         }
 
         #region Private methods
