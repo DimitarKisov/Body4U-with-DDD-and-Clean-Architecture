@@ -2,18 +2,21 @@
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
+    using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
     using Body4U.Application.Features.Identity.Commands.LoginUser;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Serilog;
     using System;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     using static Body4U.Application.Common.GlobalConstants.Account;
     using static Body4U.Application.Common.GlobalConstants.System;
 
-    public class IdentityService : IIdentityService
+    internal class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
@@ -29,52 +32,101 @@
             this.jwtTokenGeneratorService = jwtTokenGeneratorService;
         }
 
-        public async Task<Result<IUser>> Register(CreateUserCommand command)
+        public async Task<Result<IUser>> Register(CreateUserCommand request)
         {
-            var image = ImageConverter(command.ProfilePicture).Data;
-            var gender = Gender.FromValue<Gender>(command.Gender);
+            try
+            {
+                var imageResult = ImageConverter(request.ProfilePicture);
+                if (!imageResult.Succeeded)
+                {
+                    return Result<IUser>.Failure(imageResult.Errors);
+                }
 
-            var user = new ApplicationUser(
-                command.Email,
-                command.PhoneNumber,
-                command.FirstName,
-                command.LastName,
-                command.Age,
-                image,
-                gender);
+                var gender = Gender.FromValue<Gender>(request.Gender);
 
-            var result = await this.userManager.CreateAsync(user, command.Password);
+                var user = new ApplicationUser(
+                    request.Email,
+                    request.PhoneNumber,
+                    request.FirstName,
+                    request.LastName,
+                    request.Age,
+                    imageResult.Data,
+                    gender);
 
-            return result.Succeeded ?
-                Result<IUser>.SuccessWith(user) : 
-                Result<IUser>.Failure(RegistrationUnssuccesful);
+                var result = await this.userManager.CreateAsync(user, request.Password);
+
+                return result.Succeeded 
+                    ? Result<IUser>.SuccessWith(user)
+                    : Result<IUser>.Failure(RegistrationUnssuccesful);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.Register)}", ex);
+                return Result<IUser>.Failure(Wrong);
+            }
         }
 
-        public async Task<Result<LoginOutputModel>> Login(LoginUserCommand command)
+        public async Task<Result<LoginOutputModel>> Login(LoginUserCommand request)
         {
-            var user = await this.userManager.FindByEmailAsync(command.Email);
-            if (user == null)
+            try
             {
-                return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
-            }
+                var user = await this.userManager.FindByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+                }
 
-            var passwordValid = await this.userManager.CheckPasswordAsync(user, command.Password);
-            if (!passwordValid)
+                var passwordValid = await this.userManager.CheckPasswordAsync(user, request.Password);
+                if (!passwordValid)
+                {
+                    return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+                }
+
+                var result = await this.signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, user.LockoutEnabled);
+                if (result.Succeeded)
+                {
+                    var tokenResult = this.jwtTokenGeneratorService.GenerateToken(user);
+
+                    if (tokenResult.Succeeded)
+                    {
+                        return Result<LoginOutputModel>.SuccessWith(new LoginOutputModel(tokenResult.Data.Token));
+                    }
+
+                    return Result<LoginOutputModel>.Failure(LoginFailed);
+                }
+
+                return user.LockoutEnabled && user.LockoutEnd != null && user.LockoutEnd.Value > DateTime.Now
+                        ? Result<LoginOutputModel>.Failure(Locked)
+                        : Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+            }
+            catch (Exception ex)
             {
-                return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.Login)}", ex);
+                return Result<LoginOutputModel>.Failure(Wrong);
             }
+        }
 
-            var result = await signInManager.PasswordSignInAsync(user, command.Password, command.RememberMe, user.LockoutEnabled);
-            if (result.Succeeded)
+        public async Task<Result> ChangePassword(ChangePasswordCommand request, string userId)
+        {
+            try
             {
-                var token = this.jwtTokenGeneratorService.GenerateToken(user);
+                var user = await this.userManager.FindByIdAsync(userId);
+                var result = await this.userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
 
-                return Result<LoginOutputModel>.SuccessWith(new LoginOutputModel(token));
+                if (result.Succeeded)
+                {
+                    return Result.Success;
+                }
+
+                var errors = result.Errors.Select(e => e.Description);
+
+                return Result.Failure(errors);
             }
-
-            return user.LockoutEnabled && user.LockoutEnd != null && user.LockoutEnd.Value > DateTime.Now
-                    ? Result<LoginOutputModel>.Failure(Locked)
-                    : Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.ChangePassword)}", ex);
+                return Result<LoginOutputModel>.Failure(Wrong);
+            }
         }
 
         #region Private methods

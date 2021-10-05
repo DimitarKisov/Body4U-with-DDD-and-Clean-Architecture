@@ -14,10 +14,8 @@
 
         public byte[] Image { get; set; }
 
+        //TODO: Тъй като преди това е IFormFile и там си има проверки, не съм сигурен на дали ще ни е нужна тази проверка
         private void Validate(byte[] image)
-        {
-            //TODO: Тъй като преди това е IFormFile и там си има проверки, не съм сигурен на дали ще ни е нужна тази проверка
-            Guard.AgaintsEmptyFile<InvalidTrainerImageException>(image, nameof(this.Image));
-        }
+            => Guard.AgaintsEmptyFile<InvalidTrainerImageException>(image, nameof(this.Image));
     }
 }

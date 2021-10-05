@@ -2,12 +2,13 @@
 {
     public class GlobalConstants
     {
-        public class System 
+        public class System
         {
             public const string SystemName = "Body4U";
             public const string AdministratorRoleName = "Administrator";
             public const string UserRoleName = "User";
             public const string TrainerRoleName = "Trainer";
+            public const string Wrong = "Something went wrong.";
         }
 
         public class Account
@@ -22,6 +23,10 @@
             public const string WrongRights = "Нямате права за това действие.";
             public const string WrongUsernameOrPassword = "Wrong email or password.";
             public const string Locked = "Account is locked.";
+            public const string Unauthorized = "Unauthorized";
+            public const string PasswordChangeFail = "Unssuccesful password change.";
+            public const string LoginFailed = "Login failed.";
+            public const string WrongId = "User with this Id: '{0}' was not found.";
         }
 
         public class Trainer

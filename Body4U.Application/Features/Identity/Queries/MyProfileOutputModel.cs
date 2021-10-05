@@ -1,0 +1,39 @@
+﻿namespace Body4U.Application.Features.Identity.Queries
+{
+    public class MyProfileOutputModel
+    {
+        public MyProfileOutputModel(
+            string firstName,
+            string lastName,
+            string email,
+            string? profilePicture,
+            int age,
+            string phoneNumber,
+            int gender)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.Email = email;
+            this.ProfilePicture = profilePicture;
+            this.Age = age;
+            this.PhoneNumber = phoneNumber;
+            this.Gender = gender;
+        }
+
+        public string FirstName { get; }
+
+        public string LastName { get; }
+
+        public string FullName => FirstName + " " + LastName;
+
+        public string Email { get; }
+
+        public string? ProfilePicture { get; }
+
+        public int Age { get; set; }
+
+        public string PhoneNumber { get; }
+
+        public int Gender { get; }
+    }
+}

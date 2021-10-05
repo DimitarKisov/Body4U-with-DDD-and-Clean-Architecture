@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Infrastructure.Identity
 {
     using Body4U.Application.Features.Identity;
+    using Body4U.Domain.Common;
     using Body4U.Domain.Exceptions;
     using Body4U.Domain.Models.Trainers;
     using Microsoft.AspNetCore.Identity;
@@ -100,6 +101,24 @@
             }
 
             this.Trainer = trainer;
+        }
+
+        public ApplicationUser UpdateFirstName(string firstName)
+        {
+            this.ValidateFirstName(firstName);
+
+            this.FirstName = firstName;
+            return this;
+        }
+
+        private void Validate(string email, string phoneNumber, string firstName, string lastName, int age, byte[] profilePicture)
+        {
+            //Guard ...
+        }
+
+        private void ValidateFirstName(string firstName)
+        {
+            //Guard...
         }
     }
 }

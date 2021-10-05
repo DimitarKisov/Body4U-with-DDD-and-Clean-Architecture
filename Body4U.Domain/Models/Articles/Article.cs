@@ -115,16 +115,9 @@
         #region Validations
         private void Validate(string title, string content, byte[] image)
         {
-            Guard.AgainstEmptyString<InvalidArticleException>(title, nameof(this.Title));
-
-            Guard.ForStringLength<InvalidArticleException>(title, MinTitleLength, MaxTitleLength, nameof(this.Title));
-
-            Guard.AgainstEmptyString<InvalidArticleException>(content, nameof(this.Content));
-
-            Guard.ForStringLength<InvalidArticleException>(content, MinContentLength, MaxContentLength, nameof(this.Content));
-
-            //TODO: Тъй като преди това е IFormFile и там си има проверки, не съм сигурен на дали ще ни е нужна тази проверка
-            Guard.AgaintsEmptyFile<InvalidArticleException>(image, nameof(this.Image));
+            this.ValidateTitle(title);
+            this.ValidateContent(content);
+            this.ValidateImage(image);
         }
 
         private void ValidateTitle(string title)
@@ -134,6 +127,7 @@
             Guard.ForStringLength<InvalidArticleException>(title, MinTitleLength, MaxTitleLength, nameof(this.Title));
         }
 
+        //TODO: Тъй като преди това е IFormFile и там си има проверки, не съм сигурен на дали ще ни е нужна тази проверка
         private void ValidateImage(byte[] image)
         {
             Guard.AgaintsEmptyFile<InvalidArticleException>(image, nameof(this.Image));

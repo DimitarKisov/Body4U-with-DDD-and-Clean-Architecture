@@ -7,7 +7,10 @@
 
     public class LoginUserCommand : IRequest<Result<LoginOutputModel>>
     {
-        public LoginUserCommand(string email, string password, bool rememberMe)
+        public LoginUserCommand(
+            string email,
+            string password,
+            bool rememberMe)
         {
             this.Email = email;
             this.Password = password;

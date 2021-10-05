@@ -139,19 +139,11 @@
         #region Validations
         private void Validate(string bio, string shortBio, string facebookUrl, string instagramUrl, string youtubeChannelUrl)
         {
-            Guard.AgainstEmptyString<InvalidTrainerException>(bio, nameof(this.Bio));
-
-            Guard.ForStringLength<InvalidTrainerException>(bio, MinBioLength, MaxBioLength, nameof(this.Bio));
-
-            Guard.AgainstEmptyString<InvalidTrainerException>(shortBio, nameof(this.ShortBio));
-
-            Guard.ForStringLength<InvalidTrainerException>(shortBio, MinShortBioLenght, MaxShortBioLength, nameof(this.ShortBio));
-
-            Guard.AgaintsWrongUrl<InvalidTrainerException>(facebookUrl, FacebookUrlRegex, nameof(this.FacebookUrl));
-
-            Guard.AgaintsWrongUrl<InvalidTrainerException>(instagramUrl, InstragramUrlRegex, nameof(this.InstagramUrl));
-
-            Guard.AgaintsWrongUrl<InvalidTrainerException>(youtubeChannelUrl, YoutubeChannelUrlRegex, nameof(this.YoutubeChannelUrl));
+            this.ValidateBio(bio);
+            this.ValidateShortBio(shortBio);
+            this.ValidateFacebookUrl(facebookUrl);
+            this.ValidateInstagramUrl(instagramUrl);
+            this.ValidateYoutubeChannelUrl(youtubeChannelUrl);
         }
 
         private void ValidateBio(string bio)
