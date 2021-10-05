@@ -161,13 +161,13 @@
         }
 
         private void ValidateFacebookUrl(string facebookUrl) 
-            => Guard.AgaintsWrongUrl<InvalidTrainerException>(facebookUrl, FacebookUrlRegex, nameof(this.FacebookUrl));
+            => Guard.ForRegexExpression<InvalidTrainerException>(facebookUrl, FacebookUrlRegex, nameof(this.FacebookUrl));
 
         private void ValidateInstagramUrl(string instagramUrl)
-            => Guard.AgaintsWrongUrl<InvalidTrainerException>(instagramUrl, InstragramUrlRegex, nameof(this.InstagramUrl));
+            => Guard.ForRegexExpression<InvalidTrainerException>(instagramUrl, InstragramUrlRegex, nameof(this.InstagramUrl));
 
         private void ValidateYoutubeChannelUrl(string youtubeChannelUrl)
-            => Guard.AgaintsWrongUrl<InvalidTrainerException>(youtubeChannelUrl, YoutubeChannelUrlRegex, nameof(this.YoutubeChannelUrl));
+            => Guard.ForRegexExpression<InvalidTrainerException>(youtubeChannelUrl, YoutubeChannelUrlRegex, nameof(this.YoutubeChannelUrl));
         #endregion
     }
 }

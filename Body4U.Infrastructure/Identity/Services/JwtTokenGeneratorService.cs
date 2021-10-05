@@ -1,8 +1,9 @@
-﻿namespace Body4U.Infrastructure.Identity
+﻿namespace Body4U.Infrastructure.Identity.Services
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Commands.GenerateRefreshToken;
+    using Body4U.Infrastructure.Identity.Models;
     using Body4U.Infrastructure.Persistence;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;

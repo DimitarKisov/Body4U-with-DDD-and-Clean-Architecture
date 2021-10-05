@@ -13,7 +13,7 @@
 
         protected ApplicationDbContext Data { get; }
 
-        protected IQueryable<TEntity> All() => this.Data.Set<TEntity>();
+        //protected IQueryable<TEntity> All() => this.Data.Set<TEntity>();
 
         public async Task Save(TEntity entity, CancellationToken cancellationToken = default)
         {

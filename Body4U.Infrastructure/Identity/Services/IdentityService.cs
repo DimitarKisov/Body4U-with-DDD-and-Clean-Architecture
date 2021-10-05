@@ -1,16 +1,19 @@
-﻿namespace Body4U.Infrastructure.Identity
+﻿namespace Body4U.Infrastructure.Identity.Services
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
+    using Body4U.Application.Features.Identity.Commands.EditUser;
     using Body4U.Application.Features.Identity.Commands.LoginUser;
+    using Body4U.Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Serilog;
     using System;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using static Body4U.Application.Common.GlobalConstants.Account;
@@ -42,7 +45,7 @@
                     return Result<IUser>.Failure(imageResult.Errors);
                 }
 
-                var gender = Gender.FromValue<Gender>(request.Gender);
+                var gender = Domain.Common.Enumeration.FromValue<Gender>(request.Gender);
 
                 var user = new ApplicationUser(
                     request.Email,
@@ -126,6 +129,56 @@
             {
                 Log.Error($"{nameof(IdentityService)}.{nameof(this.ChangePassword)}", ex);
                 return Result<LoginOutputModel>.Failure(Wrong);
+            }
+        }
+
+        public async Task<Result<IUser>> EditMyProfile(EditUserCommand request, IUser user, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var castedUser = user as ApplicationUser;
+
+                if (request.ProfilePicture != null &&
+                    request.ProfilePicture.ContentType != "image/jpeg" &&
+                    request.ProfilePicture.ContentType != "image/png" &&
+                    request.ProfilePicture.ContentType != "image/jpg")
+                {
+                    return Result<IUser>.Failure(WrongImageFormat);
+                }
+
+                var gender = Domain.Common.Enumeration.FromValue<Gender>(request.Gender);
+
+                castedUser!
+                    .UpdatePhoneNumber(request.PhoneNumber)
+                    .UpdateFirstName(request.FirstName)
+                    .UpdateLastName(request.LastName)
+                    .UpdateAge(request.Age)
+                    .UpdateGender(gender);
+
+                if (request.ProfilePicture != null)
+                {
+                    if (request.ProfilePicture.Length > 0)
+                    {
+                        using (var stream = new MemoryStream())
+                        {
+                            await request.ProfilePicture.CopyToAsync(stream, cancellationToken);
+
+                            if (castedUser.ProfilePicture != stream.ToArray())
+                            {
+                                castedUser.UpdateProfilePicture(stream.ToArray());
+                            }
+                        }
+                    }
+                }
+
+                return Result<IUser>.SuccessWith(castedUser);
+
+                //TODO: Когато се добавят и треньори го довърши? Може и да не се ъпдейтва оттука.
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.EditMyProfile)}", ex);
+                return Result<IUser>.Failure(Wrong);
             }
         }
 

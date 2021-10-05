@@ -13,7 +13,7 @@
 
         public class Account
         {
-            public const string WrongImageFormat = "Please choose a picture with format .jpg or .png";
+            public const string WrongImageFormat = "Please choose a picture with format .jpg/.jpeg or .png";
             public const string EmptyFile = "The file is empty.";
             public const string EmailExists = "Вече съществува потребител с такъв email.";
             public const string PleaseConfirmEmail = "Моля потвърдете вашия email.";

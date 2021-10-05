@@ -8,6 +8,7 @@
     public static class Guard
     {
         private const int FileZeroLength = 0;
+
         public static void AgainstEmptyString<TException>(string value, string name = "Value")
             where TException : BaseDomainException, new()
         {
@@ -43,10 +44,10 @@
             ThrowException<TException>($"{name} cannot be empty.");
         }
 
-        public static void AgaintsWrongUrl<TException>(string url, string regexPattern, string name = "Value")
+        public static void ForRegexExpression<TException>(string text, string regexPattern, string name = "Value")
             where TException : BaseDomainException, new()
         {
-            var isMatch = Regex.IsMatch(url, regexPattern);
+            var isMatch = Regex.IsMatch(text, regexPattern);
 
             if (isMatch)
             {

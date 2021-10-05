@@ -1,6 +1,6 @@
 ﻿namespace Body4U.Infrastructure.Persistence.Seeders
 {
-    using Body4U.Infrastructure.Identity;
+    using Body4U.Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using System;

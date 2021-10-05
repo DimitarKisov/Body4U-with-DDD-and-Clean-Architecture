@@ -1,6 +1,6 @@
 ﻿namespace Body4U.Infrastructure.Persistence.Configurations
 {
-    using Body4U.Infrastructure.Identity;
+    using Body4U.Infrastructure.Identity.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

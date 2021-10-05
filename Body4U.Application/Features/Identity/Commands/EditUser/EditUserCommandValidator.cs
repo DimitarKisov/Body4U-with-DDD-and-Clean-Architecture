@@ -1,33 +1,32 @@
-﻿namespace Body4U.Application.Features.Identity.Commands.CreateUser
+﻿namespace Body4U.Application.Features.Identity.Commands.EditUser
 {
     using FluentValidation;
 
     using static Body4U.Domain.Models.ModelContants.User;
 
-    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+    public class EditUserCommandValidator : AbstractValidator<EditUserCommand>
     {
-        public CreateUserCommandValidator()
+        public EditUserCommandValidator()
         {
-            this.RuleFor(x => x.Email)
-                .EmailAddress()
+            this.RuleFor(x => x.PhoneNumber)
+                .Matches(PhoneNumberRegex)
+                .NotEmpty();
+
+            this.RuleFor(x => x.FirstName)
+                .NotEmpty();
+
+            this.RuleFor(x => x.LastName)
+                .NotEmpty();
+
+            this.RuleFor(x => x.Age)
+                .InclusiveBetween(MinAge, MaxAge)
                 .NotEmpty();
 
             this.RuleFor(x => x.PhoneNumber)
                 .Matches(PhoneNumberRegex)
                 .NotEmpty();
 
-            this.RuleFor(x => x.FirstName)
-                .MinimumLength(MinFirstNameLength)
-                .MaximumLength(MaxFirstNameLength)
-                .NotEmpty();
-
-            this.RuleFor(x => x.LastName)
-                .MinimumLength(MinLastNameLength)
-                .MaximumLength(MaxLastNameLength)
-                .NotEmpty();
-
-            this.RuleFor(x => x.Age)
-                .InclusiveBetween(MinAge, MaxAge)
+            this.RuleFor(x => x.Gender)
                 .NotEmpty();
         }
     }

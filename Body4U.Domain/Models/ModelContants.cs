@@ -4,7 +4,8 @@
     {
         public class User
         {
-            public const string PhoneRegex = @"^(\+)?(359|0)8[789]\d{1}(|-| )\d{3}(|-| )\d{3}$";
+            public const string PhoneNumberRegex = @"^(\+)?(359|0)8[789]\d{1}(|-| )\d{3}(|-| )\d{3}$";
+            public const string EmailRegex = @"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$";
             public const int MinFirstNameLength = 3;
             public const int MaxFirstNameLength = 50;
             public const int MinLastNameLength = 3;

@@ -17,6 +17,6 @@
         public string VideoUrl { get; }
 
         private void Validate(string videoUrl)
-            => Guard.AgaintsWrongUrl<InvalidTrainerVideoException>(videoUrl, regexPattern, nameof(this.VideoUrl));
+            => Guard.ForRegexExpression<InvalidTrainerVideoException>(videoUrl, regexPattern, nameof(this.VideoUrl));
     }
 }

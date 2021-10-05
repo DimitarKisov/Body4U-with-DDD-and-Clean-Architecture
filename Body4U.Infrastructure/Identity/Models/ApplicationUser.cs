@@ -1,12 +1,15 @@
-﻿namespace Body4U.Infrastructure.Identity
+﻿namespace Body4U.Infrastructure.Identity.Models
 {
     using Body4U.Application.Features.Identity;
-    using Body4U.Domain.Common;
     using Body4U.Domain.Exceptions;
     using Body4U.Domain.Models.Trainers;
+    using Body4U.Infrastructure.Identity.Common;
+    using Body4U.Infrastructure.Identity.Exceptions;
     using Microsoft.AspNetCore.Identity;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using static Body4U.Domain.Models.ModelContants.User;
 
     public class ApplicationUser : IdentityUser, IUser
     {
@@ -20,6 +23,8 @@
             Gender gender)
             : base(email)
         {
+            this.Validate(email, phoneNumber, firstName, lastName, age, gender);
+
             this.Id = Guid.NewGuid().ToString();
             this.Email = email;
             this.PhoneNumber = phoneNumber;
@@ -93,6 +98,7 @@
 
         public ICollection<IdentityUserLogin<string>> Logins { get; set; }
 
+        #region State mutation methods
         public void BecomeTrainer(Trainer trainer)
         {
             if (this.Trainer != null)
@@ -103,6 +109,14 @@
             this.Trainer = trainer;
         }
 
+        public ApplicationUser UpdatePhoneNumber(string phoneNumber)
+        {
+            this.ValidatePhoneNumber(phoneNumber);
+
+            this.PhoneNumber = phoneNumber;
+            return this;
+        }
+
         public ApplicationUser UpdateFirstName(string firstName)
         {
             this.ValidateFirstName(firstName);
@@ -111,14 +125,78 @@
             return this;
         }
 
-        private void Validate(string email, string phoneNumber, string firstName, string lastName, int age, byte[] profilePicture)
+        public ApplicationUser UpdateLastName(string lastName)
         {
-            //Guard ...
+            this.ValidateLastName(lastName);
+
+            this.LastName = lastName;
+            return this;
+        }
+
+        public ApplicationUser UpdateAge(int age)
+        {
+            this.ValidateAge(age);
+
+            this.Age = age;
+            return this;
+        }
+
+        public ApplicationUser UpdateGender(Gender gender)
+        {
+            this.ValidateGender(gender);
+
+            this.Gender = gender;
+            return this;
+        }
+
+        public ApplicationUser UpdateProfilePicture(byte[] profilePicture)
+        {
+            this.ValidateProfilePicture(profilePicture);
+
+            this.ProfilePicture = profilePicture;
+            return this;
+        }
+        #endregion
+
+        #region Validations
+        private void Validate(string email, string phoneNumber, string firstName, string lastName, int age, Gender gender)
+        {
+            this.ValidateEmail(email);
+            this.ValidatePhoneNumber(phoneNumber);
+            this.ValidateFirstName(firstName);
+            this.ValidateLastName(lastName);
+            this.ValidateAge(age);
+            this.ValidateGender(gender);
         }
 
         private void ValidateFirstName(string firstName)
         {
-            //Guard...
+            Guard.AgainstEmptyString<InvalidApplicationUserException>(firstName, nameof(this.FirstName));
+
+            Guard.ForStringLength<InvalidApplicationUserException>(firstName, MinFirstNameLength, MaxFirstNameLength, nameof(this.FirstName));
         }
+
+        private void ValidateLastName(string lastName)
+        {
+            Guard.AgainstEmptyString<InvalidApplicationUserException>(lastName, nameof(this.FirstName));
+
+            Guard.ForStringLength<InvalidApplicationUserException>(lastName, MinLastNameLength, MaxLastNameLength, nameof(this.LastName));
+        }
+
+        private void ValidateEmail(string email)
+            => Guard.ForRegexExpression<InvalidApplicationUserException>(email, EmailRegex, nameof(this.Email));
+
+        private void ValidatePhoneNumber(string phoneNumber)
+           => Guard.ForRegexExpression<InvalidApplicationUserException>(phoneNumber, PhoneNumberRegex, nameof(this.PhoneNumber));
+
+        private void ValidateAge(int age)
+            => Guard.AgainstOutOfRange<InvalidApplicationUserException>(age, MinAge, MaxAge, nameof(this.Age));
+
+        private void ValidateGender(Gender gender)
+           => Guard.ForValidGender<InvalidApplicationUserException>(gender, nameof(this.Gender));
+
+        private void ValidateProfilePicture(byte[] profilePicture)
+            => Guard.AgaintsEmptyFile<InvalidApplicationUserException>(profilePicture, nameof(this.ProfilePicture));
+        #endregion
     }
 }

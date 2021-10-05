@@ -5,6 +5,7 @@
     using Body4U.Application.Features.Identity.Queries;
     using Serilog;
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using static Body4U.Application.Common.GlobalConstants.Account;
@@ -17,11 +18,14 @@
         {
         }
 
-        public async Task<Result<MyProfileOutputModel>> MyProfile(string userId)
+        public async Task<IUser> Find(string userId, CancellationToken cancellationToken)
+            => await this.Data.Users.FindAsync(new object[] { userId }, cancellationToken);
+
+        public async Task<Result<MyProfileOutputModel>> MyProfile(string userId, CancellationToken cancellationToken)
         {
             try
             {
-                var user = await this.Data.Users.FindAsync(userId);
+                var user = await this.Data.Users.FindAsync(new object[] { userId }, cancellationToken);
                 if (user == null)
                 {
                     return Result<MyProfileOutputModel>.Failure(string.Format(WrongId, userId));
@@ -33,13 +37,14 @@
 
                 return Result<MyProfileOutputModel>.SuccessWith(
                     new MyProfileOutputModel(
-                    user.FirstName,
-                    user.LastName,
-                    user.Email,
-                    profilePicture,
-                    user.Age,
-                    user.PhoneNumber,
-                    user.Gender.Value));
+                        user.Id,
+                        user.FirstName,
+                        user.LastName,
+                        user.Email,
+                        profilePicture,
+                        user.Age,
+                        user.PhoneNumber,
+                        user.Gender.Value));
             }
             catch (Exception ex)
             {

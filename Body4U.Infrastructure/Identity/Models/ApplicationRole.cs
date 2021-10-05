@@ -1,4 +1,4 @@
-﻿namespace Body4U.Infrastructure.Identity
+﻿namespace Body4U.Infrastructure.Identity.Models
 {
     using Microsoft.AspNetCore.Identity;
     using System;

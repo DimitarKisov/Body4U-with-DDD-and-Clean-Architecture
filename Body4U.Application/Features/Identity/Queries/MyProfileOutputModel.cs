@@ -3,6 +3,7 @@
     public class MyProfileOutputModel
     {
         public MyProfileOutputModel(
+            string id,
             string firstName,
             string lastName,
             string email,
@@ -11,6 +12,7 @@
             string phoneNumber,
             int gender)
         {
+            this.Id = id;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Email = email;
@@ -20,11 +22,11 @@
             this.Gender = gender;
         }
 
+        public string Id { get; }
+
         public string FirstName { get; }
 
         public string LastName { get; }
-
-        public string FullName => FirstName + " " + LastName;
 
         public string Email { get; }
 
