@@ -12,6 +12,8 @@
             public const int MaxLastNameLength = 50;
             public const int MinAge = 5;
             public const int MaxAge = 80;
+            public const int MinPasswordLength = 6;
+            public const int MaxPasswordLength = 20;
         }
 
         public class Article

@@ -4,6 +4,7 @@
     using Body4U.Application.Features.Identity;
     using Body4U.Infrastructure.Identity.Models;
     using Body4U.Infrastructure.Identity.Services;
+    using Body4U.Infrastructure.Messeging;
     using Body4U.Infrastructure.Persistence;
     using Body4U.Infrastructure.Persistence.Seeders;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -53,7 +54,7 @@
             IConfiguration configuration)
         {
             services
-                .AddIdentity<ApplicationUser, ApplicationRole>(options =>
+                .AddDefaultIdentity<ApplicationUser>(options =>
                 {
                     options.Password.RequiredLength = 6;
                     options.Password.RequireDigit = false;
@@ -61,6 +62,7 @@
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
+                .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             var secret = configuration.GetSection("JwtSettings")["Secret"];
@@ -88,6 +90,7 @@
 
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }

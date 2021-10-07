@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Identity;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+
     using static Body4U.Domain.Models.ModelContants.User;
 
     public class ApplicationUser : IdentityUser, IUser

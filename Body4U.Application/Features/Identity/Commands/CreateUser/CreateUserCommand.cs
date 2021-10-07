@@ -6,7 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class CreateUserCommand : IRequest<Result<IUser>>
+    public class CreateUserCommand : IRequest<Result<CreateUserOutputModel>>
     {
         public CreateUserCommand(
             string email,
@@ -45,24 +45,15 @@
 
         public string Password { get; }
 
-        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<IUser>>
+        public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<CreateUserOutputModel>>
         {
             private readonly IIdentityService identityService;
 
             public CreateUserCommandHandler(IIdentityService identityService)
                 => this.identityService = identityService;
 
-            public async Task<Result<IUser>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-            {
-                var result = await this.identityService.Register(request);
-
-                if (!result.Succeeded)
-                {
-                    return result.Errors;
-                }
-
-                return result;
-            }
+            public async Task<Result<CreateUserOutputModel>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+                => await this.identityService.Register(request);
         }
     }
 }

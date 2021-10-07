@@ -8,7 +8,7 @@
             public const string AdministratorRoleName = "Administrator";
             public const string UserRoleName = "User";
             public const string TrainerRoleName = "Trainer";
-            public const string Wrong = "Something went wrong.";
+            public const string Wrong = "Something went wrong in {0}.";
         }
 
         public class Account
@@ -27,6 +27,10 @@
             public const string PasswordChangeFail = "Unssuccesful password change.";
             public const string LoginFailed = "Login failed.";
             public const string WrongId = "User with this Id: '{0}' was not found.";
+            public const string EmailProblem = "Email was not sent successfuly.";
+            public const string UnssuccesfulEmailConfirmation = "Email activation was not successful.";
+            public const string EmailNotConfirmed = "Email is not confirmed.";
+            public const string WrongGender = "There is no such gender.";
         }
 
         public class Trainer

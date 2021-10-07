@@ -64,13 +64,9 @@
 
                 var result = await this.identityService.EditMyProfile(request, user, cancellationToken);
 
-                if (result.Succeeded)
-                {
-                    await this.identityRepository.Save(result.Data, cancellationToken);
-                    return Result.Success;
-                }
+                await this.identityRepository.Save(result.Data, cancellationToken);
 
-                return Result.Failure(result.Errors);
+                return result;
             }
         }
     }
