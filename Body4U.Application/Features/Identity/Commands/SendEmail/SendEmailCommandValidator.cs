@@ -1,12 +1,12 @@
-﻿namespace Body4U.Application.Features.Identity.Commands.SendEmailConfirmation
+﻿namespace Body4U.Application.Features.Identity.Commands.SendEmail
 {
     using FluentValidation;
 
     using static Body4U.Domain.Models.ModelContants.User;
 
-    public class SendEmailConfirmationCommandValidator : AbstractValidator<SendEmailConfirmationCommand>
+    public class SendEmailCommandValidator : AbstractValidator<SendEmailCommand>
     {
-        public SendEmailConfirmationCommandValidator()
+        public SendEmailCommandValidator()
         {
             this.RuleFor(x => x.Email)
                 .Matches(EmailRegex)

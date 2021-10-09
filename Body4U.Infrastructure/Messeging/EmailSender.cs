@@ -68,7 +68,7 @@
             catch (Exception ex)
             {
                 Log.Error($"{nameof(EmailSender)}.{nameof(this.SendEmailAsync)}", ex);
-                return Result.Failure(Wrong);
+                return Result.Failure(string.Format(Wrong, nameof(this.SendEmailAsync)));
             }
         }
 

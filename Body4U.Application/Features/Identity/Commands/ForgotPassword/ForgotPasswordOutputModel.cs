@@ -1,8 +1,8 @@
-﻿namespace Body4U.Application.Features.Identity.Commands.CreateUser
+﻿namespace Body4U.Application.Features.Identity.Commands.ForgotPassword
 {
-    public class CreateUserOutputModel
+    public class ForgotPasswordOutputModel
     {
-        public CreateUserOutputModel(string email, string userId, string token)
+        public ForgotPasswordOutputModel(string email, string userId, string token)
         {
             this.Email = email;
             this.UserId = userId;

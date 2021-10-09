@@ -5,7 +5,9 @@
     using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
     using Body4U.Application.Features.Identity.Commands.EditUser;
+    using Body4U.Application.Features.Identity.Commands.ForgotPassword;
     using Body4U.Application.Features.Identity.Commands.LoginUser;
+    using Body4U.Application.Features.Identity.Commands.ResetPassword;
     using Body4U.Application.Features.Identity.Commands.VerifyEmail;
     using Body4U.Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Http;
@@ -73,7 +75,7 @@
                 if (result.Succeeded)
                 {
                     var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    return Result<CreateUserOutputModel>.SuccessWith(new CreateUserOutputModel(user.Email, user.Id, token, default!));
+                    return Result<CreateUserOutputModel>.SuccessWith(new CreateUserOutputModel(user.Email, user.Id, token));
                 }
 
                 return Result<CreateUserOutputModel>.Failure(result.Errors.Select(x => x.Description));
@@ -148,7 +150,6 @@
                 }
 
                 var errors = result.Errors.Select(e => e.Description);
-
                 return Result.Failure(errors);
             }
             catch (Exception ex)
@@ -218,13 +219,7 @@
                     return Result.Failure(string.Format(WrongId, request.UserId));
                 }
 
-                //TODO: Не знам дали е ще е нужно, когато се деплойне. Ако фронт енда обработва по някакъв начин токена, няма да е нужно. Ако няма да го обработва ще е нужно. Ако си се изпраща "обработени" няма да е нужно
-
-                //ПРИМЕР : CfDJ8BTAUaeVErZMmgBhJwO+tnhguBAxVOU//1bFlbAOUJXKFnAr59nId7rMkezJy5eCVsf8fmXqwjwem5GWJdEK3tHsYugJ0xNPPw0gFqODDqYoggShAfnbInZ7lcFf+s9zIWqpQA0106JebAkfd36SrYLH+ynv5FSjNnHWcSDkthmnTPpthMp/wTI91RflC6/0Tr4pcRdUSmvZSYzRowNRLCZ3/jXCQm+Ds5k8G2QS8YNchV+NqCqjwv7tC/8JJgOU6w== Така е, когато се генерира, обаче когато се изпрати към дадения човек става така : CfDJ8BTAUaeVErZMmgBhJwO%2BtnhguBAxVOU%2F%2F1bFlbAOUJXKFnAr59nId7rMkezJy5eCVsf8fmXqwjwem5GWJdEK3tHsYugJ0xNPPw0gFqODDqYoggShAfnbInZ7lcFf%2Bs9zIWqpQA0106JebAkfd36SrYLH%2Bynv5FSjNnHWcSDkthmnTPpthMp%2FwTI91RflC6%2F0Tr4pcRdUSmvZSYzRowNRLCZ3%2FjXCQm%2BDs5k8G2QS8YNchV%2BNqCqjwv7tC%2F8JJgOU6w%3D%3D
-
-                var tokenDecoded = HttpUtility.UrlDecode(request.Token);
-
-                var result = await userManager.ConfirmEmailAsync(user, tokenDecoded);
+                var result = await this.userManager.ConfirmEmailAsync(user, request.Token);
                 if (result.Succeeded)
                 {
                     return Result.Success;
@@ -236,6 +231,54 @@
             {
                 Log.Error($"{nameof(IdentityService)}.{nameof(this.VerifyEmail)}", ex);
                 return Result.Failure(string.Format(Wrong, nameof(this.VerifyEmail)));
+            }
+        }
+
+        public async Task<Result<ForgotPasswordOutputModel>> ForgotPassword(ForgotPasswordCommand request)
+        {
+            try
+            {
+                var user = await this.userManager.FindByEmailAsync(request.Email);
+                if (user != null && await this.userManager.IsEmailConfirmedAsync(user))
+                {
+                    var token = await userManager.GeneratePasswordResetTokenAsync(user);
+                    return Result<ForgotPasswordOutputModel>.SuccessWith(new ForgotPasswordOutputModel(user.Email, user.Id, token));
+                }
+
+                return Result<ForgotPasswordOutputModel>.SuccessWith(new ForgotPasswordOutputModel(default!, default!, default!));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.ForgotPassword)}", ex);
+                return Result<ForgotPasswordOutputModel>.Failure(string.Format(Wrong, nameof(this.ForgotPassword)));
+            }
+        }
+
+        public async Task<Result> ResetPassword(string userId, string token, ResetPasswordCommand request)
+        {
+            try
+            {
+                var user = await this.userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return Result.Failure(string.Format(WrongId, userId));
+                }
+
+                //var tokenDecoded = HttpUtility.UrlDecode(token);
+                var result = await this.userManager.ResetPasswordAsync(user, token, request.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    var errors = result.Errors.Select(x => x.Description);
+                    return Result.Failure(errors);
+                }
+
+                return Result.Success;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.ResetPassword)}", ex);
+                return Result.Failure(string.Format(Wrong, nameof(this.ResetPassword))); ;
             }
         }
 

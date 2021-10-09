@@ -1,17 +1,22 @@
 ﻿namespace Body4U.Web.Features
 {
     using Body4U.Application.Common;
+    using Body4U.Application.Features;
     using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
     using Body4U.Application.Features.Identity.Commands.EditUser;
+    using Body4U.Application.Features.Identity.Commands.ForgotPassword;
     using Body4U.Application.Features.Identity.Commands.GenerateRefreshToken;
     using Body4U.Application.Features.Identity.Commands.LoginUser;
-    using Body4U.Application.Features.Identity.Commands.SendEmailConfirmation;
+    using Body4U.Application.Features.Identity.Commands.ResetPassword;
+    using Body4U.Application.Features.Identity.Commands.SendEmail;
     using Body4U.Application.Features.Identity.Commands.VerifyEmail;
     using Body4U.Application.Features.Identity.Queries;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
+
+    using static Body4U.Application.Common.GlobalConstants.Account;
 
     public class IdentityController : ApiController
     {
@@ -24,24 +29,37 @@
             #region Logic
             if (registrationResult.Value != null)
             {
-                var confirmationLink = Url.Action(nameof(this.VerifyEmail), "Identity",
-                new { userId = registrationResult.Value.UserId, token = registrationResult.Value.Token }, Request.Scheme, Request.Host.ToString());
+                var sendMailResult = await this.CreateConfirmationLinkAndSend(nameof(this.VerifyEmail), registrationResult.Value.UserId, registrationResult.Value.Token, registrationResult.Value.Email, EmailConfirmSubject, EmailConfirmHtmlContent);
 
-                registrationResult.Value.UpdateConfirmationLink(confirmationLink);
-
-                var sendMailResult = await this.SendEmailConfirmation(new SendEmailConfirmationCommand(registrationResult.Value.Email, confirmationLink));
-
-                if (sendMailResult.Value != null && sendMailResult.Value.Succeeded)
-                {
-                    return sendMailResult;
-                }
-
-                return new ActionResult<Result>(sendMailResult.Result);
-
+                return sendMailResult;
             }
             #endregion
 
             return registrationResult.Result;
+        }
+
+        [HttpPost]
+        [Route(nameof(ForgotPassword))]
+        public async Task<ActionResult<Result>> ForgotPassword(ForgotPasswordCommand command)
+        {
+            var forgotPasswordResult = await this.Send(command);
+
+            #region Logic
+            if (forgotPasswordResult.Value != null)
+            {
+                if (forgotPasswordResult.Value.Email == default && forgotPasswordResult.Value.Token == default && forgotPasswordResult.Value.UserId == default)
+                {
+                    return new ActionResult<Result>(Result.Success);
+                }
+
+                await this.CreateConfirmationLinkAndSend(nameof(this.ResetPassword), forgotPasswordResult.Value.UserId, forgotPasswordResult.Value.Token!, forgotPasswordResult.Value.Email!, ForgotPasswordSubject, ForgotPasswordHtmlContent);
+            }
+            #endregion
+
+            //Ако е възникнала неочаквана грешка, връщаме нея, иначе винаги ще връщаме успех, за да избегнем брут форс атаки
+            return forgotPasswordResult.Result == null
+                ? new ActionResult<Result>(Result.Success)
+                : forgotPasswordResult.Result;
         }
 
         [HttpPost]
@@ -77,10 +95,23 @@
         public async Task<ActionResult<Result>> VerifyEmail([FromQuery] VerifyEmailCommand command)
             => await this.Send(command);
 
+        [HttpPost]
+        [Route(nameof(ResetPassword))]
+        public async Task<ActionResult<Result>> ResetPassword([FromQuery]string userId, [FromQuery]string token, ResetPasswordCommand command)
+            => await this.Send(command.SetId(userId).SetToken(token));
+
         #region Private actions
         [HttpPost]
-        private async Task<ActionResult<Result>> SendEmailConfirmation(SendEmailConfirmationCommand command)
+        private async Task<ActionResult<Result>> SendEmail(SendEmailCommand command)
             => await this.Send(command);
+
+        private async Task<ActionResult<Result>> CreateConfirmationLinkAndSend(string redirectActionName, string userId, string token, string email, string subject, string htmlContent)
+        {
+            var confirmationLink = Url.Action(redirectActionName, "Identity",
+                   new { userId = userId, token = token }, Request.Scheme, Request.Host.ToString());
+
+            return await this.SendEmail(new SendEmailCommand(email, confirmationLink, subject, string.Format(htmlContent, confirmationLink)));
+        }
         #endregion
     }
 }

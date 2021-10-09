@@ -31,6 +31,10 @@
             public const string UnssuccesfulEmailConfirmation = "Email activation was not successful.";
             public const string EmailNotConfirmed = "Email is not confirmed.";
             public const string WrongGender = "There is no such gender.";
+            public const string EmailConfirmSubject = "Email Confirmation";
+            public const string EmailConfirmHtmlContent = "<p>To confirm your email, please click <a href=\"{0}\">HERE</a></p>";
+            public const string ForgotPasswordSubject = "Password Reset";
+            public const string ForgotPasswordHtmlContent = "<p>To reset your password, please click <a href=\"{0}\">HERE</a></p>";
         }
 
         public class Trainer

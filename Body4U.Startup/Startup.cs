@@ -10,8 +10,9 @@ namespace Body4U.Startup
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using CarRentalSystem.Web.Middleware;
 
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
     public class Startup
     {
         public Startup(IConfiguration configuration) => this.Configuration = configuration;
@@ -24,8 +25,7 @@ namespace Body4U.Startup
                 .AddApplication()
                 .AddInfrastructure(this.Configuration)
                 .AddWebComponents()
-                .AddSwagger()
-                .AddControllers();
+                .AddSwagger();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -37,6 +37,7 @@ namespace Body4U.Startup
             }
 
             app
+                .UseValidationExceptionHandler()
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseAuthentication()

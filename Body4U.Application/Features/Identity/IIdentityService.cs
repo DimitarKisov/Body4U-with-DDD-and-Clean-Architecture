@@ -4,7 +4,9 @@
     using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
     using Body4U.Application.Features.Identity.Commands.EditUser;
+    using Body4U.Application.Features.Identity.Commands.ForgotPassword;
     using Body4U.Application.Features.Identity.Commands.LoginUser;
+    using Body4U.Application.Features.Identity.Commands.ResetPassword;
     using Body4U.Application.Features.Identity.Commands.VerifyEmail;
     using System.Threading;
     using System.Threading.Tasks;
@@ -20,5 +22,9 @@
         Task<Result<IUser>> EditMyProfile(EditUserCommand request, IUser user, CancellationToken cancellationToken);
 
         Task<Result> VerifyEmail(VerifyEmailCommand request);
+
+        Task<Result<ForgotPasswordOutputModel>> ForgotPassword(ForgotPasswordCommand request);
+
+        Task<Result> ResetPassword(string userId, string token, ResetPasswordCommand request);
     }
 }

@@ -13,6 +13,11 @@
     {
         private IMediator? mediator;
 
+        public const string UserId = "{userId}";
+        public const string Token = "{token}";
+        public const string QuestionMark = "?";
+        public const string And = "&";
+
         protected IMediator Mediator
         {
             get
