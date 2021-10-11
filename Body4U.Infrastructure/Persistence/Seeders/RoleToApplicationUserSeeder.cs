@@ -19,7 +19,7 @@
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var userName = configuration.GetSection("SeedInfo")["UserName"];
+            var userName = configuration.GetSection("SeedInfo")["Email"];
 
             await AssignRoles(userManager, dbContext, userName, AdministratorRoleName);
         }

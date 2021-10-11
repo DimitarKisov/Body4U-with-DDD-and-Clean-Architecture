@@ -16,6 +16,10 @@
     <Compile Remove="Persistence\Migrations\20210930114918_Test.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20210930131444_Test.cs" />
     <Compile Remove="Persistence\Migrations\20210930131444_Test.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211011153039_Initial.cs" />
+    <Compile Remove="Persistence\Migrations\20211011153039_Initial.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211011153339_Initial.cs" />
+    <Compile Remove="Persistence\Migrations\20211011153339_Initial.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +36,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Body4U.Application\Body4U.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 
 </Project>

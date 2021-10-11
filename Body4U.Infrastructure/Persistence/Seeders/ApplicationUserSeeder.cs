@@ -17,7 +17,7 @@
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var email = configuration.GetSection("SeedInfo")["UserName"];
+            var email = configuration.GetSection("SeedInfo")["Email"];
             var phoneNumber = configuration.GetSection("SeedInfo")["PhoneNumber"];
             var firstName = configuration.GetSection("SeedInfo")["FirstName"];
             var lastName = configuration.GetSection("SeedInfo")["LastName"];
@@ -41,6 +41,8 @@
                     age,
                     null,
                     Gender.Male);
+
+                newUser.EmailConfirmed = true;
 
                 var result = await userManager.CreateAsync(newUser, password);
 

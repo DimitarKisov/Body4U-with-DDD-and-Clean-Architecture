@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Body4U.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210930085034_InitialDomainModelsAndIdentity")]
-    partial class InitialDomainModelsAndIdentity
+    [Migration("20211011155155_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,7 +155,7 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     b.ToTable("TrainerVideo");
                 });
 
-            modelBuilder.Entity("Body4U.Infrastructure.Identity.ApplicationRole", b =>
+            modelBuilder.Entity("Body4U.Infrastructure.Identity.Models.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -182,7 +182,7 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Body4U.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("Body4U.Infrastructure.Identity.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -315,10 +315,6 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
 
@@ -331,8 +327,6 @@ namespace Body4U.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims");
@@ -341,14 +335,12 @@ namespace Body4U.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -358,8 +350,6 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("UserId");
 
@@ -374,13 +364,7 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("RoleId");
 
@@ -393,10 +377,12 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -451,14 +437,14 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Body4U.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("Body4U.Infrastructure.Identity.Models.ApplicationUser", b =>
                 {
                     b.HasOne("Body4U.Domain.Models.Trainers.Trainer", "Trainer")
                         .WithOne()
-                        .HasForeignKey("Body4U.Infrastructure.Identity.ApplicationUser", "TrainerId")
+                        .HasForeignKey("Body4U.Infrastructure.Identity.Models.ApplicationUser", "TrainerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.OwnsOne("Body4U.Infrastructure.Identity.Gender", "Gender", b1 =>
+                    b.OwnsOne("Body4U.Infrastructure.Identity.Models.Gender", "Gender", b1 =>
                         {
                             b1.Property<string>("ApplicationUserId")
                                 .HasColumnType("nvarchar(450)");
@@ -477,7 +463,7 @@ namespace Body4U.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("Body4U.Infrastructure.Identity.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -486,58 +472,40 @@ namespace Body4U.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Body4U.Infrastructure.Identity.Models.ApplicationUser", null)
                         .WithMany("Claims")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Body4U.Infrastructure.Identity.Models.ApplicationUser", null)
                         .WithMany("Logins")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("Body4U.Infrastructure.Identity.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
-                        .WithMany()
+                    b.HasOne("Body4U.Infrastructure.Identity.Models.ApplicationUser", null)
+                        .WithMany("Roles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Body4U.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("Body4U.Infrastructure.Identity.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

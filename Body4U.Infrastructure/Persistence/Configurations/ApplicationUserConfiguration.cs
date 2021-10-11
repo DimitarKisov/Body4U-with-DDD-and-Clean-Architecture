@@ -46,21 +46,21 @@
             builder
                 .HasMany(e => e.Claims)
                 .WithOne()
-                .HasForeignKey("ApplicationUserId")
+                .HasForeignKey(x => x.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasMany(e => e.Logins)
                 .WithOne()
-                .HasForeignKey("ApplicationUserId")
+                .HasForeignKey(x => x.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
                 .HasMany(e => e.Roles)
                 .WithOne()
-                .HasForeignKey("ApplicationUserId")
+                .HasForeignKey(x => x.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
         }
