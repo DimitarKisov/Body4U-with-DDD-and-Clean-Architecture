@@ -26,8 +26,8 @@
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex);
                 Log.Error($"{nameof(ValidationExceptionHandlerMiddleware)}.{nameof(Invoke)}", ex);
+                await HandleExceptionAsync(context, ex);
             }
         }
 

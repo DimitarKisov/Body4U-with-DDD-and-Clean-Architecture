@@ -8,6 +8,7 @@
     using Body4U.Infrastructure.Persistence;
     using Body4U.Infrastructure.Persistence.Seeders;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Infrastructure;
     using Microsoft.EntityFrameworkCore.Storage;
@@ -54,7 +55,7 @@
             IConfiguration configuration)
         {
             services
-                .AddDefaultIdentity<ApplicationUser>(options =>
+                .AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequiredLength = 6;
                     options.Password.RequireDigit = false;
@@ -62,7 +63,6 @@
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
-                .AddRoles<ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             var secret = configuration.GetSection("JwtSettings")["Secret"];

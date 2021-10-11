@@ -3,11 +3,12 @@
     using Body4U.Domain.Models.Articles;
     using Body4U.Domain.Models.Trainers;
     using Body4U.Infrastructure.Identity.Models;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using System.Reflection;
 
-    internal class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    internal class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

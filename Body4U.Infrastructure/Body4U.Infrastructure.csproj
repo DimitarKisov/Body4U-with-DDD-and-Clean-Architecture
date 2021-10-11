@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20211011210548_Initial.cs" />
+    <Compile Remove="Migrations\20211011210548_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20211011210751_Initial.cs" />
+    <Compile Remove="Migrations\20211011210751_Initial.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20210930084646_InitialDomainModelsAndIdentity.cs" />
     <Compile Remove="Persistence\Migrations\20210930084646_InitialDomainModelsAndIdentity.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20210930084824_InitialDomainModelsAndIdentity.cs" />

@@ -26,10 +26,6 @@
                 .IsRequired();
 
             builder
-                .Property(x => x.ProfilePicture)
-                .IsRequired();
-
-            builder
                 .OwnsOne(x => x.Gender, y =>
                   {
                       y.WithOwner();
@@ -48,21 +44,21 @@
                 .WithOne()
                 .HasForeignKey(x => x.UserId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(e => e.Logins)
                 .WithOne()
                 .HasForeignKey(x => x.UserId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder
                 .HasMany(e => e.Roles)
                 .WithOne()
                 .HasForeignKey(x => x.UserId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
