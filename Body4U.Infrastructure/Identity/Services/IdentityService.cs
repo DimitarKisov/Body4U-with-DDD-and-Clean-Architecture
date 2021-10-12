@@ -118,7 +118,7 @@
                 var result = await this.signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, user.LockoutEnabled);
                 if (result.Succeeded)
                 {
-                    var tokenResult = this.jwtTokenGeneratorService.GenerateToken(user);
+                    var tokenResult = await this.jwtTokenGeneratorService.GenerateToken(user);
 
                     if (tokenResult.Succeeded)
                     {
@@ -219,7 +219,8 @@
                     return Result.Failure(string.Format(WrongId, request.UserId));
                 }
 
-                var result = await this.userManager.ConfirmEmailAsync(user, request.Token);
+                var tokenDecoded = HttpUtility.UrlDecode(request.Token);
+                var result = await this.userManager.ConfirmEmailAsync(user, tokenDecoded);
                 if (result.Succeeded)
                 {
                     return Result.Success;
@@ -264,7 +265,7 @@
                     return Result.Failure(string.Format(WrongId, userId));
                 }
 
-                //var tokenDecoded = HttpUtility.UrlDecode(token);
+                var tokenDecoded = HttpUtility.UrlDecode(token);
                 var result = await this.userManager.ResetPasswordAsync(user, token, request.NewPassword);
 
                 if (!result.Succeeded)
