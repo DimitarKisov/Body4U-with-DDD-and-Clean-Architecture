@@ -4,10 +4,8 @@
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Commands.GenerateRefreshToken;
     using Body4U.Infrastructure.Identity.Models;
-    using Body4U.Infrastructure.Persistence;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     using Serilog;
@@ -25,16 +23,13 @@
     internal class JwtTokenGeneratorService : IJwtTokenGeneratorService
     {
         private readonly IConfiguration configuration;
-        private readonly ApplicationDbContext dbContext;
         private readonly UserManager<ApplicationUser> userManager;
 
         public JwtTokenGeneratorService(
             IConfiguration configuration,
-            ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager)
         {
             this.configuration = configuration;
-            this.dbContext = dbContext;
             this.userManager = userManager;
         }
 
@@ -127,7 +122,7 @@
                     userId = claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
                 }
 
-                var user = await this.dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+                var user = await this.userManager.FindByIdAsync(userId);
 
                 if (user.IsDisabled || user.LockoutEnd != null)
                 {
@@ -141,7 +136,6 @@
                 Log.Error($"{nameof(JwtTokenGeneratorService)}.{nameof(this.GenerateRefreshToken)}", ex);
                 return Result<GenerateRefreshTokenOutputModel>.Failure(string.Format(Wrong, nameof(this.GenerateRefreshToken)));
             }
-
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Application.Features.Identity
 {
     using Body4U.Application.Common;
+    using Body4U.Application.Features.Administration.Commands;
     using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
     using Body4U.Application.Features.Identity.Commands.EditUser;
@@ -26,5 +27,7 @@
         Task<Result<ForgotPasswordOutputModel>> ForgotPassword(ForgotPasswordCommand request);
 
         Task<Result> ResetPassword(string userId, string token, ResetPasswordCommand request);
+
+        Task<Result> EditUserRoles(EditUserRolesCommand request, CancellationToken cancellationToken);
     }
 }

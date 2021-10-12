@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Infrastructure.Identity.Services
 {
     using Body4U.Application.Common;
+    using Body4U.Application.Features.Administration.Commands;
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Commands.ChangePassword;
     using Body4U.Application.Features.Identity.Commands.CreateUser;
@@ -12,8 +13,10 @@
     using Body4U.Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Serilog;
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -27,17 +30,20 @@
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly IJwtTokenGeneratorService jwtTokenGeneratorService;
         private readonly IEmailSender emailSender;
 
         public IdentityService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             IJwtTokenGeneratorService jwtTokenGeneratorService,
             IEmailSender emailSender)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
             this.jwtTokenGeneratorService = jwtTokenGeneratorService;
             this.emailSender = emailSender;
         }
@@ -279,7 +285,78 @@
             catch (Exception ex)
             {
                 Log.Error($"{nameof(IdentityService)}.{nameof(this.ResetPassword)}", ex);
-                return Result.Failure(string.Format(Wrong, nameof(this.ResetPassword))); ;
+                return Result.Failure(string.Format(Wrong, nameof(this.ResetPassword)));
+            }
+        }
+
+        public async Task<Result> EditUserRoles(EditUserRolesCommand request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var user = await this.userManager.FindByIdAsync(request.UserId);
+                var userRolesIds = user.Roles.Select(x => x.RoleId);
+
+                var rolesForAdd = request.RolesIds.Except(userRolesIds);
+                var rolesForRemove = userRolesIds.Except(request.RolesIds);
+
+                var errors = new List<string>();
+
+                foreach (var roleId in rolesForAdd)
+                {
+                    var roleName = (await this.roleManager.Roles.FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken))?.Name;
+
+                    IdentityResult identityResult;
+
+                    if (roleName != null)
+                    {
+                        if (!await this.userManager.IsInRoleAsync(user, roleName))
+                        {
+                            identityResult = await this.userManager.AddToRoleAsync(user, roleName);
+
+                            if (identityResult.Succeeded && roleName == TrainerRoleName)
+                            {
+                                //TODO: Когато се добави команда за създаване на треньор, да се довърши.
+                            }
+                            else
+                            {
+                                errors.AddRange(identityResult.Errors.Select(x => x.Description));
+                            }
+                        }
+                    }
+                }
+
+                foreach (var roleId in rolesForRemove)
+                {
+                    var roleName = (await this.roleManager.Roles.FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken))?.Name;
+
+                    IdentityResult identityResult;
+
+                    if (roleName != null)
+                    {
+                        if (await this.userManager.IsInRoleAsync(user, roleName))
+                        {
+                            identityResult = await this.userManager.RemoveFromRoleAsync(user, roleName);
+
+                            if (identityResult.Succeeded && roleName == TrainerRoleName)
+                            {
+                                //TODO: Когато се добави команда за създаване на треньор, да се довърши.
+                            }
+                            else
+                            {
+                                errors.AddRange(identityResult.Errors.Select(x => x.Description));
+                            }
+                        }
+                    }
+                }
+
+                return errors.Count() > 0
+                    ? Result.Success
+                    : Result.Failure(errors);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityService)}.{nameof(this.EditUserRoles)}", ex);
+                return Result.Failure(string.Format(Wrong, nameof(this.EditUserRoles)));
             }
         }
 
