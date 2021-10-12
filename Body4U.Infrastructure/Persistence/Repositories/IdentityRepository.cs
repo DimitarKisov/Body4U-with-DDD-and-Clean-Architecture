@@ -1,10 +1,14 @@
 ﻿namespace Body4U.Infrastructure.Persistence.Repositories
 {
     using Body4U.Application.Common;
+    using Body4U.Application.Features.Administration.Queries.SearchUsers;
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Queries;
+    using Microsoft.EntityFrameworkCore;
     using Serilog;
     using System;
+    using System.Linq;
+    using System.Linq.Expressions;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -49,7 +53,75 @@
             catch (Exception ex)
             {
                 Log.Error($"{nameof(IdentityRepository)}.{nameof(this.MyProfile)}", ex);
-                return Result<MyProfileOutputModel>.Failure(Wrong);
+                return Result<MyProfileOutputModel>.Failure(string.Format(Wrong, nameof(this.MyProfile)));
+            }
+        }
+
+        public async Task<Result<SearchUsersOutputModel>> Users(SearchUsersQuery request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var users = this.Data
+                .Users
+                .Select(x => new UserOutputModel
+                (
+                    x.Id,
+                    x.FirstName,
+                    x.LastName,
+                    x.Email,
+                    x.PhoneNumber
+                ))
+                .AsQueryable();
+
+                var totalRecords = await users.CountAsync(cancellationToken);
+
+                int pageIndex = request.PageIndex;
+                int pageSize = request.PageSize;
+                string sortingOrder = request.OrderBy!;
+                string sortingField = request.SortBy!;
+
+                var orderBy = "Id";
+
+                if (!string.IsNullOrWhiteSpace(sortingField))
+                {
+                    if (sortingField.ToLower() == "firstname")
+                    {
+                        orderBy = nameof(request.FirstName);
+                    }
+                    else if (sortingField.ToLower() == "lastname")
+                    {
+                        orderBy = nameof(request.LastName);
+                    }
+                    else if (sortingField.ToLower() == "email")
+                    {
+                        orderBy = nameof(request.Email);
+                    }
+                    else if (sortingField.ToLower() == "phonenumber")
+                    {
+                        orderBy = nameof(request.PhoneNumber);
+                    }
+                }
+
+                if (sortingOrder != null && sortingOrder.ToLower() == Desc)
+                {
+                    users = users.OrderByDescending(x => orderBy);
+                }
+                else
+                {
+                    users = users.OrderBy(x => orderBy);
+                }
+
+                var data = await users
+                 .Skip(pageIndex * pageSize)
+                 .Take(pageSize)
+                 .ToListAsync(cancellationToken);
+
+                return Result<SearchUsersOutputModel>.SuccessWith(new SearchUsersOutputModel(data, totalRecords));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(IdentityRepository)}.{nameof(this.Users)}", ex);
+                return Result<SearchUsersOutputModel>.Failure(string.Format(Wrong, nameof(this.Users)));
             }
         }
     }

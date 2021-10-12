@@ -11,8 +11,8 @@
     public class AdministrationController : ApiController
     {
         [HttpPost]
-        [Route(nameof(Search))]
-        public async Task<ActionResult<SearchUsersOutputModel>> Search([FromQuery] SearchUsersQuery query)
+        [Route(nameof(Users))]
+        public async Task<ActionResult<SearchUsersOutputModel>> Users([FromQuery] SearchUsersQuery query)
             => await this.Send(query);
     }
 }

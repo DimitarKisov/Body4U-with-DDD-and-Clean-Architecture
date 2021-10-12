@@ -5,14 +5,14 @@
     public class SearchUsersOutputModel
     {
         public SearchUsersOutputModel(
-            IEnumerable<UserOutputModel> users,
+            IEnumerable<UserOutputModel> data,
             int totalRecords)
         {
-            this.Users = users;
+            this.Data = data;
             this.TotalRecords = totalRecords;
         }
 
-        public IEnumerable<UserOutputModel> Users { get; }
+        public IEnumerable<UserOutputModel> Data { get; }
 
         public int TotalRecords { get; }
     }

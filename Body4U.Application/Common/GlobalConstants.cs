@@ -9,6 +9,8 @@
             public const string UserRoleName = "User";
             public const string TrainerRoleName = "Trainer";
             public const string Wrong = "Something went wrong in {0}.";
+            public const string Desc = "desc";
+            public const string Asc = "asc";
         }
 
         public class Account

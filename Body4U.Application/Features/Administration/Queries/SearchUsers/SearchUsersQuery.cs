@@ -3,7 +3,6 @@
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
     using MediatR;
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -21,7 +20,7 @@
 
         public string? OrderBy { get; set; }
 
-        public int PageIndex { get; set; } = 1;
+        public int PageIndex { get; set; } = 0;
 
         public int PageSize { get; set; } = 10;
 
@@ -32,8 +31,8 @@
             public SearchUsersQueryHandler(IIdentityRepository identityRepository)
                 => this.identityRepository = identityRepository;
 
-            public Task<Result<SearchUsersOutputModel>> Handle(SearchUsersQuery request, CancellationToken cancellationToken)
-                => throw new NotImplementedException();
+            public async Task<Result<SearchUsersOutputModel>> Handle(SearchUsersQuery request, CancellationToken cancellationToken)
+                => await this.identityRepository.Users(request, cancellationToken);
         }
     }
 }
