@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    using static Body4U.Domain.Models.ModelContants.User;
+    using static Body4U.Domain.Models.ModelConstants.User;
 
     internal class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {

@@ -2,7 +2,7 @@
 {
     using FluentValidation;
 
-    using static Body4U.Domain.Models.ModelContants.User;
+    using static Body4U.Domain.Models.ModelConstants.User;
 
     public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
     {
@@ -29,6 +29,11 @@
             this.RuleFor(x => x.Age)
                 .InclusiveBetween(MinAge, MaxAge)
                 .NotEmpty();
+
+            this.RuleFor(x => x.Gender)
+                .IsInEnum()
+                .NotEmpty()
+                .WithMessage(GenderMessage);
         }
     }
 }

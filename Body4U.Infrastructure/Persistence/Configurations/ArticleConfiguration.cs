@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    using static Body4U.Domain.Models.ModelContants.Article;
+    using static Body4U.Domain.Models.ModelConstants.Article;
 
     internal class ArticleConfiguration : IEntityTypeConfiguration<Article>
     {

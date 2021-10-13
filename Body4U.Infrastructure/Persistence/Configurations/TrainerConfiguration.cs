@@ -4,7 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    using static Body4U.Domain.Models.ModelContants.Trainer;
+    using static Body4U.Domain.Models.ModelConstants.Trainer;
 
     internal class TrainerConfiguration : IEntityTypeConfiguration<Trainer>
     {

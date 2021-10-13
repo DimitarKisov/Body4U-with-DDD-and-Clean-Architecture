@@ -4,7 +4,7 @@
     using Body4U.Domain.Exceptions;
     using System;
 
-    using static Body4U.Domain.Models.ModelContants.Article;
+    using static Body4U.Domain.Models.ModelConstants.Article;
 
     public class Article : Entity<int>, IAggregateRoot
     {

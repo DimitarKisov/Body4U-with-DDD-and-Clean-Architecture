@@ -9,7 +9,7 @@
     using System;
     using System.Collections.Generic;
 
-    using static Body4U.Domain.Models.ModelContants.User;
+    using static Body4U.Domain.Models.ModelConstants.User;
 
     public class ApplicationUser : IdentityUser, IUser
     {

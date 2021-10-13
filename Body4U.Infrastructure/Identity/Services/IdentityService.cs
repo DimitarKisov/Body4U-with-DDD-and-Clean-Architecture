@@ -10,6 +10,7 @@
     using Body4U.Application.Features.Identity.Commands.LoginUser;
     using Body4U.Application.Features.Identity.Commands.ResetPassword;
     using Body4U.Application.Features.Identity.Commands.VerifyEmail;
+    using Body4U.Domain.Common;
     using Body4U.Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
@@ -58,14 +59,7 @@
                     return Result<CreateUserOutputModel>.Failure(imageResult.Errors);
                 }
 
-                var allowedGenderValues = Domain.Common.Enumeration.GetAll<Gender>().Select(x => x.Value);
-
-                if (!allowedGenderValues.Any(x => x == request.Gender))
-                {
-                    return Result<CreateUserOutputModel>.Failure(WrongGender);
-                }
-
-                var gender = Domain.Common.Enumeration.FromValue<Gender>(request.Gender);
+                var gender = Enumeration.FromValue<Gender>(request.Gender);
 
                 var user = new ApplicationUser(
                     request.Email,

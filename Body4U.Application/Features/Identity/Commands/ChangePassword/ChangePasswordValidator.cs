@@ -2,7 +2,7 @@
 {
     using FluentValidation;
 
-    using static Body4U.Domain.Models.ModelContants.User;
+    using static Body4U.Domain.Models.ModelConstants.User;
 
     public class ChangePasswordValidator : AbstractValidator<ChangePasswordCommand>
     {

@@ -1,6 +1,6 @@
 ﻿namespace Body4U.Domain.Models
 {
-    public class ModelContants
+    public class ModelConstants
     {
         public class User
         {
@@ -14,6 +14,8 @@
             public const int MaxAge = 80;
             public const int MinPasswordLength = 6;
             public const int MaxPasswordLength = 20;
+
+            public const string GenderMessage = "Wrong value for 'Gender'.";
         }
 
         public class Article
@@ -22,6 +24,8 @@
             public const int MaxTitleLength = 100;
             public const int MinContentLength = 50;
             public const int MaxContentLength = 25000;
+
+            public const string ArticleTypeMessage = "Wrong value for 'ArticleType'.";
         }
 
         public class Trainer

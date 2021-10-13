@@ -7,7 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using static Body4U.Domain.Models.ModelContants.Trainer;
+    using static Body4U.Domain.Models.ModelConstants.Trainer;
 
     public class Trainer : Entity<int>, IAggregateRoot
     {
