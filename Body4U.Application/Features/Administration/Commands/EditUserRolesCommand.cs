@@ -9,13 +9,13 @@
 
     public class EditUserRolesCommand : IRequest<Result>
     {
-        public EditUserRolesCommand(string userId, IEnumerable<string> rolesIds)
+        public EditUserRolesCommand(string email, IEnumerable<string> rolesIds)
         {
-            this.UserId = userId;
+            this.Email = email;
             this.RolesIds = rolesIds;
         }
 
-        public string UserId { get; }
+        public string Email { get; }
 
         public IEnumerable<string> RolesIds { get; }
 

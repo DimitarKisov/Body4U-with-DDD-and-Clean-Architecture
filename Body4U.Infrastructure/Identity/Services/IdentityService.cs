@@ -293,9 +293,21 @@
         {
             try
             {
-                var user = await this.userManager.FindByIdAsync(request.UserId);
-                var userRolesIds = user.Roles.Select(x => x.RoleId);
+                var user = await this.userManager.FindByEmailAsync(request.Email);
+                var userRolesIds = new List<string>();
 
+                //Взимаме всички имена на роли за дадения потребител
+                var userRoleNames = await userManager.GetRolesAsync(user);
+                //Взимаме тези роли, които отговарят за съответния потребител
+                var roles = await roleManager.Roles
+                    .Where(x => userRoleNames
+                        .Contains(x.Name))
+                    .Select(x => x.Id)
+                    .ToListAsync(cancellationToken);
+
+                //И ги добавяме към списъка за роли от ИД-та на потребителя
+                roles.ForEach(x => userRolesIds.Add(x));
+                
                 var rolesForAdd = request.RolesIds.Except(userRolesIds);
                 var rolesForRemove = userRolesIds.Except(request.RolesIds);
 
@@ -349,7 +361,7 @@
                     }
                 }
 
-                return errors.Count() > 0
+                return errors.Count() == 0
                     ? Result.Success
                     : Result.Failure(errors);
             }
