@@ -148,26 +148,41 @@
 
         private void ValidateBio(string bio)
         {
-            Guard.AgainstEmptyString<InvalidTrainerException>(bio, nameof(this.Bio));
+            //Guard.AgainstEmptyString<InvalidTrainerException>(bio, nameof(this.Bio));
 
-            Guard.ForStringLength<InvalidTrainerException>(bio, MinBioLength, MaxBioLength, nameof(this.Bio));
+            //Guard.ForStringLength<InvalidTrainerException>(bio, MinBioLength, MaxBioLength, nameof(this.Bio));
         }
 
         private void ValidateShortBio(string shortBio)
         {
-            Guard.AgainstEmptyString<InvalidTrainerException>(shortBio, nameof(this.ShortBio));
+            //Guard.AgainstEmptyString<InvalidTrainerException>(shortBio, nameof(this.ShortBio));
 
-            Guard.ForStringLength<InvalidTrainerException>(shortBio, MinShortBioLenght, MaxShortBioLength, nameof(this.ShortBio));
+            //Guard.ForStringLength<InvalidTrainerException>(shortBio, MinShortBioLenght, MaxShortBioLength, nameof(this.ShortBio));
         }
 
-        private void ValidateFacebookUrl(string facebookUrl) 
-            => Guard.ForRegexExpression<InvalidTrainerException>(facebookUrl, FacebookUrlRegex, nameof(this.FacebookUrl));
+        private void ValidateFacebookUrl(string facebookUrl)
+        {
+            if (facebookUrl != null)
+            {
+                Guard.ForRegexExpression<InvalidTrainerException>(facebookUrl, FacebookUrlRegex, nameof(this.FacebookUrl));
+            }
+        }
 
         private void ValidateInstagramUrl(string instagramUrl)
-            => Guard.ForRegexExpression<InvalidTrainerException>(instagramUrl, InstragramUrlRegex, nameof(this.InstagramUrl));
+        {
+            if (instagramUrl != null)
+            {
+                Guard.ForRegexExpression<InvalidTrainerException>(instagramUrl, InstragramUrlRegex, nameof(this.InstagramUrl));
+            }
+        }
 
         private void ValidateYoutubeChannelUrl(string youtubeChannelUrl)
-            => Guard.ForRegexExpression<InvalidTrainerException>(youtubeChannelUrl, YoutubeChannelUrlRegex, nameof(this.YoutubeChannelUrl));
+        {
+            if (youtubeChannelUrl != null)
+            {
+                Guard.ForRegexExpression<InvalidTrainerException>(youtubeChannelUrl, YoutubeChannelUrlRegex, nameof(this.YoutubeChannelUrl));
+            }
+        }
         #endregion
     }
 }

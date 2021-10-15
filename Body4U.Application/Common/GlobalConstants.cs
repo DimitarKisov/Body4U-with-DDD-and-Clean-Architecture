@@ -55,6 +55,7 @@
             public const string WrongImageWidthHeight = "Моля въведете снимка с размери минимум 730x548.";
             public const string ArticleMissing = "Не съществува статия с такъв номер.";
             public const string WrongImageFormat = "Wrong image format. Choose a file format '.jpg', '.jpeg' or '.png'";
+            public const string WrongArticleType = "Wrong article type.";
         }
 
         public class Common

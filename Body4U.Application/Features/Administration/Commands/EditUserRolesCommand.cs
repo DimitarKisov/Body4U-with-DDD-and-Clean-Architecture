@@ -2,6 +2,8 @@
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
+    using Body4U.Application.Features.Trainers;
+    using Body4U.Domain.Factories.Trainers;
     using MediatR;
     using System.Collections.Generic;
     using System.Threading;
@@ -22,12 +24,52 @@
         public class EditUserRolesCommandHandler : IRequestHandler<EditUserRolesCommand, Result>
         {
             private readonly IIdentityService identityService;
+            private readonly IIdentityRepository identityRepository;
+            private readonly ITrainerFactory trainerFactory;
+            private readonly ITrainerRepository trainerRepository;
 
-            public EditUserRolesCommandHandler(IIdentityService identityService)
-                => this.identityService = identityService;
+            public EditUserRolesCommandHandler(
+                IIdentityService identityService,
+                IIdentityRepository identityRepository,
+                ITrainerFactory trainerFactory,
+                ITrainerRepository trainerRepository)
+            {
+                this.identityService = identityService;
+                this.identityRepository = identityRepository;
+                this.trainerFactory = trainerFactory;
+                this.trainerRepository = trainerRepository;
+            }
 
-            public Task<Result> Handle(EditUserRolesCommand request, CancellationToken cancellationToken)
-                => this.identityService.EditUserRoles(request, cancellationToken);
+            public async Task<Result> Handle(EditUserRolesCommand request, CancellationToken cancellationToken)
+            {
+                var result = await this.identityService.EditUserRoles(request, cancellationToken);
+                if (!result.Succeeded)
+                {
+                    return Result<EditUserRolesOutputModel>.Failure(result.Errors);
+                }
+
+                var errors = new List<string>();
+
+                foreach (var userId in result.Data.UsersIdsForCreate)
+                {
+                    var trainer = this.trainerFactory.Build();
+                    var user = await this.identityRepository.Find(userId, cancellationToken);
+                    user.BecomeTrainer(trainer);
+                    await this.trainerRepository.Save(trainer);
+                }
+
+                foreach (var userId in result.Data.UsersIdsForDelete)
+                {
+                    var user = await this.identityRepository.Find(userId, cancellationToken);
+                    var deleteResult = await this.trainerRepository.Delete(user, cancellationToken);
+                    if (!deleteResult.Succeeded)
+                    {
+                        errors.AddRange(deleteResult.Errors);
+                    }
+                }
+
+                return Result.Success;
+            }
         }
     }
 }

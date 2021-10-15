@@ -28,6 +28,6 @@
 
         Task<Result> ResetPassword(string userId, string token, ResetPasswordCommand request);
 
-        Task<Result> EditUserRoles(EditUserRolesCommand request, CancellationToken cancellationToken);
+        Task<Result<EditUserRolesOutputModel>> EditUserRoles(EditUserRolesCommand request, CancellationToken cancellationToken);
     }
 }

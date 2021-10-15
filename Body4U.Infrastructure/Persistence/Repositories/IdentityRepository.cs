@@ -25,12 +25,13 @@
         }
 
         public async Task<IUser> Find(string userId, CancellationToken cancellationToken)
-            => await this.Data.Users.FindAsync(new object[] { userId }, cancellationToken);
+            => await this.Data.Users.Include(x => x.Trainer).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
 
         public async Task<Result<MyProfileOutputModel>> MyProfile(string userId, CancellationToken cancellationToken)
         {
             try
             {
+                //TODO: Може със селект да се изберат само пропъртитата, които ни са нужни, а не да се издърпват всички
                 var user = await this.Data.Users.FindAsync(new object[] { userId }, cancellationToken);
                 if (user == null)
                 {

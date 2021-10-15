@@ -6,5 +6,7 @@
     public interface IUser : IAggregateRoot
     {
         void BecomeTrainer(Trainer trainer);
+
+        void DeleteTrainer();
     }
 }

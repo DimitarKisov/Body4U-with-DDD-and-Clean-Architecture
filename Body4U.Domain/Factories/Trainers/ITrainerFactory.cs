@@ -4,14 +4,5 @@
 
     public interface ITrainerFactory : IFactory<Trainer>
     {
-        ITrainerFactory WithBio(string bio);
-
-        ITrainerFactory WithShortBio(string shortBio);
-
-        ITrainerFactory WithFacebookUrl(string facebookUrl);
-
-        ITrainerFactory WithInstagramUrl(string instagramUrl);
-
-        ITrainerFactory WithYoutubeChannelUrl(string youtubeChannelUrl);
     }
 }

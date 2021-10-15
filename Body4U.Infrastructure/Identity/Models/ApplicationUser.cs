@@ -103,10 +103,20 @@
         {
             if (this.Trainer != null)
             {
-                throw new InvalidTrainerException($"User '{this.UserName}' is already a trainer.");
+                throw new InvalidTrainerException($"User '{this.Email}' is already a trainer.");
             }
 
             this.Trainer = trainer;
+        }
+
+        public void DeleteTrainer()
+        {
+            if (this.Trainer == null)
+            {
+                throw new InvalidTrainerException($"User '{this.Email}' is not a trainer.");
+            }
+
+            this.Trainer = null;
         }
 
         public ApplicationUser UpdatePhoneNumber(string phoneNumber)

@@ -27,7 +27,7 @@
 
         [HttpPost]
         [Route(nameof(EditUserRoles))]
-        public async Task<ActionResult<Result>> EditUserRoles(EditUserRolesCommand command)
+        public async Task<ActionResult> EditUserRoles(EditUserRolesCommand command)
             => await this.Send(command);
     }
 }

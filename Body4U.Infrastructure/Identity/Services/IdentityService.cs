@@ -59,6 +59,13 @@
                     return Result<CreateUserOutputModel>.Failure(imageResult.Errors);
                 }
 
+                var allowedGenderValues = Enumeration.GetAll<Gender>().Select(x => x.Value);
+
+                if (!allowedGenderValues.Any(x => x == request.Gender))
+                {
+                    return Result<CreateUserOutputModel>.Failure(WrongGender);
+                }
+
                 var gender = Enumeration.FromValue<Gender>(request.Gender);
 
                 var user = new ApplicationUser(
@@ -173,7 +180,7 @@
                     return Result<IUser>.Failure(WrongImageFormat);
                 }
 
-                var gender = Domain.Common.Enumeration.FromValue<Gender>(request.Gender);
+                var gender = Enumeration.FromValue<Gender>(request.Gender);
 
                 castedUser!
                     .UpdatePhoneNumber(request.PhoneNumber)
@@ -283,7 +290,7 @@
             }
         }
 
-        public async Task<Result> EditUserRoles(EditUserRolesCommand request, CancellationToken cancellationToken)
+        public async Task<Result<EditUserRolesOutputModel>> EditUserRoles(EditUserRolesCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -305,6 +312,9 @@
                 var rolesForAdd = request.RolesIds.Except(userRolesIds);
                 var rolesForRemove = userRolesIds.Except(request.RolesIds);
 
+                var usersIdsForCreate = new List<string>();
+                var usersIdsForDelete = new List<string>();
+
                 var errors = new List<string>();
 
                 foreach (var roleId in rolesForAdd)
@@ -321,7 +331,7 @@
 
                             if (identityResult.Succeeded && roleName == TrainerRoleName)
                             {
-                                //TODO: Когато се добави команда за създаване на треньор, да се довърши.
+                                usersIdsForCreate.Add(user.Id);
                             }
                             else
                             {
@@ -345,7 +355,7 @@
 
                             if (identityResult.Succeeded && roleName == TrainerRoleName)
                             {
-                                //TODO: Когато се добави команда за създаване на треньор, да се довърши.
+                                usersIdsForDelete.Add(user.Id);
                             }
                             else
                             {
@@ -356,13 +366,13 @@
                 }
 
                 return errors.Count() == 0
-                    ? Result.Success
-                    : Result.Failure(errors);
+                    ? Result<EditUserRolesOutputModel>.SuccessWith(new EditUserRolesOutputModel(usersIdsForCreate, usersIdsForDelete))
+                    : Result<EditUserRolesOutputModel>.Failure(errors);
             }
             catch (Exception ex)
             {
                 Log.Error($"{nameof(IdentityService)}.{nameof(this.EditUserRoles)}", ex);
-                return Result.Failure(string.Format(Wrong, nameof(this.EditUserRoles)));
+                return Result<EditUserRolesOutputModel>.Failure(string.Format(Wrong, nameof(this.EditUserRoles)));
             }
         }
 

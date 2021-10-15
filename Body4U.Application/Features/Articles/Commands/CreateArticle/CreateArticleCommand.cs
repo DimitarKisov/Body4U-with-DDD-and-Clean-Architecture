@@ -3,9 +3,11 @@
     using Body4U.Application.Common;
     using Body4U.Domain.Common;
     using Body4U.Domain.Factories.Articles;
+    using Body4U.Domain.Models.Articles;
     using MediatR;
     using Microsoft.AspNetCore.Http;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -67,7 +69,14 @@
                     return Result<CreateArticleOutputModel>.Failure(imageResult.Errors);
                 }
 
-                var articleType = Enumeration.FromValue<Domain.Models.Articles.ArticleType>(request.ArticleType);
+                var allowedArticleValues = Enumeration.GetAll<ArticleType>().Select(x => x.Value);
+
+                if (!allowedArticleValues.Any(x => x == request.ArticleType))
+                {
+                    return Result<CreateArticleOutputModel>.Failure(WrongArticleType);
+                }
+
+                var articleType = Enumeration.FromValue<ArticleType>(request.ArticleType);
 
                 var article = this.articleFactory
                     .WithTitle(request.Title)

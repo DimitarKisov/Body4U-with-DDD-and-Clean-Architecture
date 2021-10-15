@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Body4U.Infrastructure.Migrations
+namespace Body4U.Infrastructure.Persistence.Migrations
 {
     public partial class Initial : Migration
     {
@@ -12,8 +12,8 @@ namespace Body4U.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    Name = table.Column<string>(maxLength: 256, nullable: false),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: false),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -27,11 +27,11 @@ namespace Body4U.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Bio = table.Column<string>(maxLength: 500, nullable: false),
-                    ShortBio = table.Column<string>(maxLength: 200, nullable: false),
-                    FacebookUrl = table.Column<string>(nullable: false),
-                    InstagramUrl = table.Column<string>(nullable: false),
-                    YoutubeChannelUrl = table.Column<string>(nullable: false),
+                    Bio = table.Column<string>(maxLength: 500, nullable: true),
+                    ShortBio = table.Column<string>(maxLength: 200, nullable: true),
+                    FacebookUrl = table.Column<string>(nullable: true),
+                    InstagramUrl = table.Column<string>(nullable: true),
+                    YoutubeChannelUrl = table.Column<string>(nullable: true),
                     IsReadyToVisualize = table.Column<bool>(nullable: false, defaultValue: false),
                     IsReadyToWrite = table.Column<bool>(nullable: false, defaultValue: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
@@ -71,7 +71,7 @@ namespace Body4U.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(maxLength: 100, nullable: false),
                     Image = table.Column<byte[]>(nullable: false),
-                    Content = table.Column<string>(maxLength: 25000, nullable: true),
+                    Content = table.Column<string>(maxLength: 25000, nullable: false),
                     Sources = table.Column<string>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     ModifiedBy = table.Column<string>(nullable: true),
@@ -94,14 +94,14 @@ namespace Body4U.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(maxLength: 256, nullable: false),
+                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
                     Email = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: false),
+                    SecurityStamp = table.Column<string>(nullable: false),
+                    ConcurrencyStamp = table.Column<string>(nullable: false),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),

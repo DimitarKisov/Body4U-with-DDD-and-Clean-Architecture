@@ -29,11 +29,6 @@
             this.RuleFor(x => x.Age)
                 .InclusiveBetween(MinAge, MaxAge)
                 .NotEmpty();
-
-            this.RuleFor(x => x.Gender)
-                .IsInEnum()
-                .NotEmpty()
-                .WithMessage(GenderMessage);
         }
     }
 }
