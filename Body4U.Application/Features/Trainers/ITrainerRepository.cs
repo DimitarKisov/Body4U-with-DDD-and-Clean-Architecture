@@ -9,6 +9,8 @@
 
     public interface ITrainerRepository : IRepository<Trainer>
     {
+        Task<Result<Trainer>> Find(int trainerId, CancellationToken cancellationToken);
+
         Task<Result> Delete(IUser user, CancellationToken cancellationToken);
     }
 }

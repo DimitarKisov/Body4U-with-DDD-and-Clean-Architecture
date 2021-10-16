@@ -1,6 +1,5 @@
 ﻿namespace Body4U.Web.Features
 {
-    using Body4U.Application.Common;
     using Body4U.Application.Features.Administration.Commands;
     using Body4U.Application.Features.Administration.Queries.Common;
     using Body4U.Application.Features.Administration.Queries.SearchRoles;

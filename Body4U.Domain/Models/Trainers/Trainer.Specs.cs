@@ -148,7 +148,7 @@
         {
             var trainer = TrainerCreator();
 
-            trainer.ChangeOpportunityToWrite();
+            trainer.ChangeOpportunityToWrite(true);
 
             trainer.IsReadyToWrite.Should().BeTrue();
         }

@@ -30,23 +30,7 @@
                     return Result<MyProfileOutputModel>.Failure(Unauthorized);
                 }
 
-                var myProfleData = await identityRepository.MyProfile(currentUserService.UserId, cancellationToken);
-                if (!myProfleData.Succeeded)
-                {
-                    return Result<MyProfileOutputModel>.Failure(myProfleData.Errors);
-                }
-
-                var result = new MyProfileOutputModel(
-                    myProfleData.Data.Id,
-                    myProfleData.Data.FirstName,
-                    myProfleData.Data.LastName,
-                    myProfleData.Data.Email,
-                    myProfleData.Data.ProfilePicture,
-                    myProfleData.Data.Age,
-                    myProfleData.Data.PhoneNumber,
-                    myProfleData.Data.Gender);
-
-                return Result<MyProfileOutputModel>.SuccessWith(result);
+                return await identityRepository.MyProfile(currentUserService.UserId, cancellationToken);
             }
         }
     }

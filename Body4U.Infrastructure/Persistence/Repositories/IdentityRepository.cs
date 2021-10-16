@@ -31,15 +31,15 @@
         {
             try
             {
-                //TODO: Може със селект да се изберат само пропъртитата, които ни са нужни, а не да се издърпват всички
-                var user = await this.Data.Users.FindAsync(new object[] { userId }, cancellationToken);
+                var user = await this.Data.Users.Include(x => x.Trainer).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+
                 if (user == null)
                 {
                     return Result<MyProfileOutputModel>.Failure(string.Format(WrongId, userId));
                 }
 
-                var profilePicture = user.ProfilePicture != null 
-                    ? Convert.ToBase64String(user.ProfilePicture) 
+                var profilePicture = user.ProfilePicture != null
+                    ? Convert.ToBase64String(user.ProfilePicture)
                     : null;
 
                 return Result<MyProfileOutputModel>.SuccessWith(
@@ -51,7 +51,8 @@
                         profilePicture,
                         user.Age,
                         user.PhoneNumber,
-                        user.Gender.Value));
+                        user.Gender.Value,
+                        user.Trainer != null ? user.Trainer.Id : default!));
             }
             catch (Exception ex)
             {

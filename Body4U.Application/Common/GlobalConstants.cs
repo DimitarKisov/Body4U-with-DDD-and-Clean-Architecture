@@ -46,6 +46,7 @@
             public const string MaxTrainerImages = "Не може да имате повече от 6 снимки.";
             public const int MaxTrainerImagesCount = 6;
             public const int MaxTrainerVideosCount = 3;
+            public const string WrongId = "Trainer with this Id: '{0}' was not found.";
         }
 
         public class Article

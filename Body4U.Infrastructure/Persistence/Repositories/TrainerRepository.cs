@@ -11,6 +11,7 @@
     using System.Threading.Tasks;
 
     using static Body4U.Application.Common.GlobalConstants.System;
+    using static Body4U.Application.Common.GlobalConstants.Trainer;
 
     internal class TrainerRepository : DataRepository<Trainer>, ITrainerRepository
     {
@@ -38,6 +39,27 @@
                 Log.Error($"{nameof(TrainerRepository)}.{nameof(this.Delete)}", ex);
                 return Result.Failure(string.Format(Wrong, nameof(this.Delete)));
             }
+        }
+
+        public async Task<Result<Trainer>> Find(int trainerId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var trainer = await this.Data
+                .Trainers
+                .FindAsync(new object[] { trainerId }, cancellationToken);
+
+                return trainer != null
+                    ? Result<Trainer>.SuccessWith(trainer)
+                    : Result<Trainer>.Failure(string.Format(WrongId, trainerId));
+
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(TrainerRepository)}.{nameof(this.Find)}", ex);
+                return Result<Trainer>.Failure(string.Format(Wrong, nameof(this.Find)));
+            }
+            
         }
     }
 }

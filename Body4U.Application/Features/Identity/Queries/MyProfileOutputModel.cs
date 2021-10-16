@@ -10,7 +10,8 @@
             string? profilePicture,
             int age,
             string phoneNumber,
-            int gender)
+            int gender,
+            int? trainerId)
         {
             this.Id = id;
             this.FirstName = firstName;
@@ -20,6 +21,7 @@
             this.Age = age;
             this.PhoneNumber = phoneNumber;
             this.Gender = gender;
+            this.TrainerId = trainerId;
         }
 
         public string Id { get; }
@@ -37,5 +39,7 @@
         public string PhoneNumber { get; }
 
         public int Gender { get; }
+
+        public int? TrainerId { get; }
     }
 }

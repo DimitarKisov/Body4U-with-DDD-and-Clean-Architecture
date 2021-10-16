@@ -38,15 +38,15 @@
             this.trainerVideos = new HashSet<TrainerVideo>();
         }
 
-        public string Bio { get; private set; }
+        public string? Bio { get; private set; }
 
-        public string ShortBio { get; private set; }
+        public string? ShortBio { get; private set; }
 
-        public string FacebookUrl { get; private set; }
+        public string? FacebookUrl { get; private set; }
 
-        public string InstagramUrl { get; private set; }
+        public string? InstagramUrl { get; private set; }
 
-        public string YoutubeChannelUrl { get; private set; }
+        public string? YoutubeChannelUrl { get; private set; }
 
         public bool IsReadyToVisualize { get; private set; }
 
@@ -115,6 +115,7 @@
             return this;
         }
 
+        //TODO: Може и да не ми трябва. Изтрий ако няма да се ползва
         public Trainer ChangeVisibility()
         {
             this.IsReadyToVisualize = !this.IsReadyToVisualize;
@@ -122,9 +123,9 @@
             return this;
         }
 
-        public Trainer ChangeOpportunityToWrite()
+        public Trainer ChangeOpportunityToWrite(bool isReady)
         {
-            this.IsReadyToWrite = !this.IsReadyToWrite;
+            this.IsReadyToWrite = isReady;
 
             return this;
         }
@@ -148,16 +149,22 @@
 
         private void ValidateBio(string bio)
         {
-            //Guard.AgainstEmptyString<InvalidTrainerException>(bio, nameof(this.Bio));
+            if (bio != null)
+            {
+                Guard.AgainstEmptyString<InvalidTrainerException>(bio, nameof(this.Bio));
 
-            //Guard.ForStringLength<InvalidTrainerException>(bio, MinBioLength, MaxBioLength, nameof(this.Bio));
+                Guard.ForStringLength<InvalidTrainerException>(bio, MinBioLength, MaxBioLength, nameof(this.Bio));
+            }
         }
 
         private void ValidateShortBio(string shortBio)
         {
-            //Guard.AgainstEmptyString<InvalidTrainerException>(shortBio, nameof(this.ShortBio));
+            if (shortBio != null)
+            {
+                Guard.AgainstEmptyString<InvalidTrainerException>(shortBio, nameof(this.ShortBio));
 
-            //Guard.ForStringLength<InvalidTrainerException>(shortBio, MinShortBioLenght, MaxShortBioLength, nameof(this.ShortBio));
+                Guard.ForStringLength<InvalidTrainerException>(shortBio, MinShortBioLenght, MaxShortBioLength, nameof(this.ShortBio));
+            }
         }
 
         private void ValidateFacebookUrl(string facebookUrl)
