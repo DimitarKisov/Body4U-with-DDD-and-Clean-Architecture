@@ -1,6 +1,7 @@
-﻿namespace Body4U.Web.Services
+﻿namespace Body4U.Infrastructure.Identity.Services
 {
     using Body4U.Application.Contracts;
+    using Body4U.Infrastructure.Identity.Common;
     using Microsoft.AspNetCore.Http;
     using System;
     using System.Security.Claims;
@@ -17,8 +18,20 @@
             }
 
             this.UserId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var trainerId = user.FindFirstValue(CustomClaimTypes.TrainerId);
+            if (trainerId != null)
+            {
+                this.TrainerId = int.Parse(trainerId);
+            }
+            else
+            {
+                this.TrainerId = default;
+            }
         }
 
         public string UserId { get; }
+
+        public int? TrainerId { get; }
     }
 }

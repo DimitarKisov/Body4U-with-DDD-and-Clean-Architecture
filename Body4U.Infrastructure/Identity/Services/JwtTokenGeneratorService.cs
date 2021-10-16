@@ -3,6 +3,7 @@
     using Body4U.Application.Common;
     using Body4U.Application.Features.Identity;
     using Body4U.Application.Features.Identity.Commands.GenerateRefreshToken;
+    using Body4U.Infrastructure.Identity.Common;
     using Body4U.Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
@@ -79,17 +80,24 @@
                 List<Claim> claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, castedUsed!.Id),
-                    new Claim(ClaimTypes.Email, castedUsed.Email)
+                    new Claim(ClaimTypes.Email, castedUsed.Email),
                 };
+
 
                 var userRolesId = (await this.userManager
                     .GetRolesAsync(castedUsed)).ToList();
 
                 userRolesId.ForEach(x => claims.Add(new Claim(ClaimTypes.Role, x)));
 
+                if (claims.Any(x => x.Value == TrainerRoleName))
+                {
+                    claims.Add(new Claim(CustomClaimTypes.TrainerId, castedUsed.Trainer != null ? castedUsed.Trainer.Id.ToString() : null));
+                }
+
                 SymmetricSecurityKey key = new SymmetricSecurityKey(encodedKey);
                 SigningCredentials signingCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-                DateTime expires = DateTime.Now.AddMinutes(60);
+                //TODO: Намали валидноста на токена на по-късен етап
+                DateTime expires = DateTime.Now.AddDays(1);
 
                 JwtSecurityToken token = new JwtSecurityToken(
                     "http://yourdomain.com",

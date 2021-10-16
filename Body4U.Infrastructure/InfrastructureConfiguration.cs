@@ -93,6 +93,8 @@
             services.AddTransient<IJwtTokenGeneratorService, JwtTokenGeneratorService>();
             services.AddTransient<IEmailSender, EmailSender>();
 
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+
             return services;
         }
 

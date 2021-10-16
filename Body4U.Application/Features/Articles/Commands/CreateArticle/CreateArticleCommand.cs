@@ -1,6 +1,8 @@
 ﻿namespace Body4U.Application.Features.Articles.Commands.CreateArticle
 {
     using Body4U.Application.Common;
+    using Body4U.Application.Contracts;
+    using Body4U.Application.Features.Trainers;
     using Body4U.Domain.Common;
     using Body4U.Domain.Factories.Articles;
     using Body4U.Domain.Models.Articles;
@@ -12,7 +14,7 @@
     using System.Threading.Tasks;
 
     using static Body4U.Application.Common.GlobalConstants.Article;
-    using static Body4U.Application.Common.GlobalConstants.System;
+    using static Body4U.Application.Common.GlobalConstants.Trainer;
 
     public class CreateArticleCommand : IRequest<Result<CreateArticleOutputModel>>
     {
@@ -44,18 +46,33 @@
         {
             private readonly IArticleRepository articleRepository;
             private readonly IArticleFactory articleFactory;
+            private readonly ICurrentUserService currentUserService;
+            private readonly ITrainerRepository trainerRepository;
 
             public CreateArticleCommandHandler(
                 IArticleRepository articleRepository,
-                IArticleFactory articleFactory)
+                IArticleFactory articleFactory,
+                ICurrentUserService currentUserService,
+                ITrainerRepository trainerRepository)
             {
                 this.articleRepository = articleRepository;
                 this.articleFactory = articleFactory;
+                this.currentUserService = currentUserService;
+                this.trainerRepository = trainerRepository;
             }
 
             public async Task<Result<CreateArticleOutputModel>> Handle(CreateArticleCommand request, CancellationToken cancellationToken)
             {
-                //TODO: Да допиша дали треньорът има право да създава статия, след като добавя репо за треньори
+                if (currentUserService.TrainerId == default)
+                {
+                    return Result<CreateArticleOutputModel>.Failure(NotTrainer);
+                }
+
+                var trainerCanWrite = (await this.trainerRepository.Find((int)currentUserService.TrainerId!, cancellationToken)).Data.IsReadyToWrite;
+                if (!trainerCanWrite)
+                {
+                    return Result<CreateArticleOutputModel>.Failure(InfoMissing);
+                }
 
                 var isTitleTaken = await this.articleRepository.HasArticleWithTitle(request.Title, cancellationToken);
                 if (isTitleTaken)

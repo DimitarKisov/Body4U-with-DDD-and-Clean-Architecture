@@ -47,6 +47,8 @@
             public const int MaxTrainerImagesCount = 6;
             public const int MaxTrainerVideosCount = 3;
             public const string WrongId = "Trainer with this Id: '{0}' was not found.";
+            public const string NotTrainer = "This user is not a trainer.";
+            public const string InfoMissing = "You have incomplete trainer profile information.";
         }
 
         public class Article

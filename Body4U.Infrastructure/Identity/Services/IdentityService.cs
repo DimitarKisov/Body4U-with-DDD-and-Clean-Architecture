@@ -98,7 +98,12 @@
         {
             try
             {
-                var user = await this.userManager.FindByEmailAsync(request.Email);
+                //var user = await this.userManager.FindByEmailAsync(request.Email);
+
+                var user = await userManager.Users
+                    .Include(x => x.Trainer)
+                    .SingleAsync(x => x.NormalizedEmail == request.Email);
+
                 if (user == null)
                 {
                     return Result<LoginOutputModel>.Failure(WrongUsernameOrPassword);
