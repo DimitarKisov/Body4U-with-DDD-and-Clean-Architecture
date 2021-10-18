@@ -15,6 +15,7 @@
 
     using static Body4U.Application.Common.GlobalConstants.Article;
     using static Body4U.Application.Common.GlobalConstants.Trainer;
+    using static Body4U.Application.Common.GlobalConstants.System;
 
     public class CreateArticleCommand : IRequest<Result<CreateArticleOutputModel>>
     {
@@ -68,8 +69,8 @@
                     return Result<CreateArticleOutputModel>.Failure(NotTrainer);
                 }
 
-                var trainerCanWrite = (await this.trainerRepository.Find((int)currentUserService.TrainerId!, cancellationToken)).Data.IsReadyToWrite;
-                if (!trainerCanWrite)
+                var trainerResult = await this.trainerRepository.Find((int)currentUserService.TrainerId!, cancellationToken);
+                if (!trainerResult.Data.IsReadyToWrite)
                 {
                     return Result<CreateArticleOutputModel>.Failure(InfoMissing);
                 }
@@ -102,6 +103,8 @@
                     .WithType(articleType)
                     .WithSources(request.Sources)
                     .Build();
+
+                trainerResult.Data.AddArticle(article);
 
                 await this.articleRepository.Save(article, cancellationToken);
 

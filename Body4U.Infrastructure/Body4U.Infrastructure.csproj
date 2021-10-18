@@ -12,6 +12,8 @@
     <Compile Remove="Persistence\Migrations\20211011210548_Initial.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20211011210751_Initial.cs" />
     <Compile Remove="Persistence\Migrations\20211011210751_Initial.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211018162921_AddedTrainerNavPropToArticle.cs" />
+    <Compile Remove="Persistence\Migrations\20211018162921_AddedTrainerNavPropToArticle.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -83,10 +83,10 @@
 
                 var totalRecords = await users.CountAsync(cancellationToken);
 
-                int pageIndex = request.PageIndex;
-                int pageSize = request.PageSize;
-                string sortingOrder = request.OrderBy!;
-                string sortingField = request.SortBy!;
+                var pageIndex = request.PageIndex;
+                var pageSize = request.PageSize;
+                var sortingOrder = request.OrderBy!;
+                var sortingField = request.SortBy!;
 
                 var orderBy = "Id";
 

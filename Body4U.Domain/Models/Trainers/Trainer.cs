@@ -130,6 +130,8 @@
             return this;
         }
 
+        public void AddArticle(Article article) => this.articles.Add(article);
+
         private void Modification(string userId)
         {
             this.ModifiedOn = DateTime.Now;
