@@ -164,7 +164,7 @@
                     return Result.Failure(ArticleMissing);
                 }
 
-                if (request.TrainerId != loggedInTrainerId)
+                if (article.TrainerId != loggedInTrainerId)
                 {
                     return Result.Failure(WrongRights);
                 }
@@ -192,6 +192,37 @@
             {
                 Log.Error($"{nameof(ArticleRepository)}.{nameof(this.Edit)}", ex);
                 return Result.Failure(string.Format(Wrong, nameof(this.Edit)));
+            }
+        }
+
+        public async Task<Result> Delete(int id, string loggedInUserId, int loggedInTrainerId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return Result.Failure(ArticleMissing);
+                }
+
+                var article = await this.Data.Articles.FindAsync(new object[] { id }, cancellationToken);
+                if (article == null)
+                {
+                    return Result.Failure(ArticleMissing);
+                }
+
+                if (article.TrainerId != loggedInTrainerId)
+                {
+                    return Result.Failure(WrongRights);
+                }
+
+                this.Data.Remove(article);
+
+                return Result.Success;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(ArticleRepository)}.{nameof(this.Delete)}", ex);
+                return Result.Failure(string.Format(Wrong, nameof(this.Delete)));
             }
         }
 

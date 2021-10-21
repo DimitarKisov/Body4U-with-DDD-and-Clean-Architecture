@@ -19,6 +19,9 @@
             this.RuleFor(x => x.Content)
                 .MinimumLength(MinContentLength)
                 .NotEmpty();
+
+            this.RuleFor(x => x.Id)
+                .NotEmpty();
         }
     }
 }

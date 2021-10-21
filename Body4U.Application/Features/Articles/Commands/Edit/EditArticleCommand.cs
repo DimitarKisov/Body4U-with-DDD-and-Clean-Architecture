@@ -13,7 +13,6 @@
     {
         public EditArticleCommand(
             int id,
-            int trainerId,
             string title,
             string content,
             IFormFile image,
@@ -28,8 +27,6 @@
         }
 
         public int Id { get; }
-
-        public int TrainerId { get; }
 
         public string Title { get; }
 

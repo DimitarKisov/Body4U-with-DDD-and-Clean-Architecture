@@ -18,5 +18,7 @@
         Task<Result<GetArticleOutputModel>> Get(int id, CancellationToken cancellationToken);
 
         Task<Result> Edit(EditArticleCommand request, string loggedInUserId, int loggedInTrainerId, CancellationToken cancellationToken);
+
+        Task<Result> Delete(int id, string loggedInUserId, int loggedInTrainerId, CancellationToken cancellationToken);
     }
 }

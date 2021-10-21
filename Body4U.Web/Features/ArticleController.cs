@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Web.Features
 {
     using Body4U.Application.Features.Articles.Commands.Create;
+    using Body4U.Application.Features.Articles.Commands.Delete;
     using Body4U.Application.Features.Articles.Commands.Edit;
     using Body4U.Application.Features.Articles.Queries.Search;
     using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,12 @@
         [Authorize(Roles = TrainerRoleName)]
         [Route(nameof(Edit))]
         public async Task<ActionResult> Edit(EditArticleCommand command)
+            => await this.Send(command);
+
+        [HttpDelete]
+        [Authorize(Roles = TrainerRoleName)]
+        [Route(nameof(Delete))]
+        public async Task<ActionResult> Delete(DeleteArticleCommand command)
             => await this.Send(command);
     }
 }
