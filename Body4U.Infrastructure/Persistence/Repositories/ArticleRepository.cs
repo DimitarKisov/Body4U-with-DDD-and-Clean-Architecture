@@ -2,6 +2,7 @@
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Articles;
+    using Body4U.Application.Features.Articles.Queries.Get;
     using Body4U.Application.Features.Articles.Queries.Search;
     using Body4U.Domain.Models.Articles;
     using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,7 @@
                 .Select(x => new
                 {
                     FullName = x.FirstName + " " + x.LastName,
-                    x.Trainer!.Id
+                    TrainerId = x.Trainer!.Id
                 })
                 .AsQueryable();
 
@@ -46,7 +47,7 @@
                         x.Content,
                         x.Image != null ? Convert.ToBase64String(x.Image) : default!,
                         x.CreatedOn,
-                        users.First(y => y.Id == x.Id).FullName,
+                        users.First(y => y.TrainerId == x.TrainerId).FullName,
                         x.ArticleType.Value
                     ))
                     .AsQueryable();
@@ -96,6 +97,56 @@
             {
                 Log.Error($"{nameof(ArticleRepository)}.{nameof(this.Search)}", ex);
                 return Result<SearchArticlesOutputModel>.Failure(string.Format(Wrong, nameof(this.Search)));
+            }
+        }
+
+        public async Task<Result<GetArticleOutputModel>> Get(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var article = await this.Data
+                .Articles
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Content = x.Content,
+                    Image = Convert.ToBase64String(x.Image),
+                    CreatedOn = x.CreatedOn,
+                    ArtcleType = x.ArticleType.Value,
+                    TrainerId = x.TrainerId,
+                    Author = this.Data.Users.First(y => y.Trainer!.Id == x.TrainerId).FullName,
+                    AuthorProfilePicture = Convert.ToBase64String(this.Data.Users.First(y => y.Trainer!.Id == x.TrainerId).ProfilePicture!)
+                })
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+                var trainer = await this.Data
+                    .Trainers
+                    .FirstOrDefaultAsync(x => x.Id == article.TrainerId);
+
+                var result = new GetArticleOutputModel
+                    (
+                        article.Id,
+                        article.Title,
+                        article.Content,
+                        article.Image,
+                        article.CreatedOn,
+                        article.Author,
+                        article.ArtcleType,
+                        article.TrainerId,
+                        trainer.ShortBio!,
+                        article.AuthorProfilePicture,
+                        trainer.FacebookUrl!,
+                        trainer.InstagramUrl!,
+                        trainer.YoutubeChannelUrl!
+                    );
+
+                return Result<GetArticleOutputModel>.SuccessWith(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(ArticleRepository)}.{nameof(this.Get)}", ex);
+                return Result<GetArticleOutputModel>.Failure(string.Format(Wrong, nameof(this.Get)));
             }
         }
     }

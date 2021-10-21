@@ -8,7 +8,7 @@
 
     public class Article : Entity<int>, IAggregateRoot
     {
-        internal Article(
+        public Article(
             string title,
             byte[] image,
             string content,

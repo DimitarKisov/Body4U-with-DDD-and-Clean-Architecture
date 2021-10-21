@@ -76,6 +76,8 @@
 
         public string LastName { get; private set; }
 
+        public string FullName => this.FirstName + " " + this.LastName;
+
         public int Age { get; private set; }
 
         public byte[]? ProfilePicture { get; private set; }

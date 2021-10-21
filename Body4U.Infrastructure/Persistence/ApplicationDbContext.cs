@@ -3,6 +3,7 @@
     using Body4U.Domain.Models.Articles;
     using Body4U.Domain.Models.Trainers;
     using Body4U.Infrastructure.Identity.Models;
+    using Body4U.Infrastructure.Persistence.DbEntities;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@
         {
         }
 
-        public DbSet<Article> Articles { get; set; } = default!;
+        public DbSet<ArticleDbEntity> Articles { get; set; } = default!;
 
         public DbSet<Trainer> Trainers { get; set; } = default!;
 
