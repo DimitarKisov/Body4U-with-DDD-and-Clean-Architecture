@@ -1,4 +1,4 @@
-﻿namespace Body4U.Application.Features.Articles.Commands.CreateArticle
+﻿namespace Body4U.Application.Features.Articles.Commands.Create
 {
     using FluentValidation;
 

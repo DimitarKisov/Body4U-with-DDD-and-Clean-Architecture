@@ -1,4 +1,4 @@
-﻿namespace Body4U.Application.Features.Articles.Commands.CreateArticle
+﻿namespace Body4U.Application.Features.Articles.Commands.Create
 {
     using Body4U.Application.Common;
     using Body4U.Application.Contracts;

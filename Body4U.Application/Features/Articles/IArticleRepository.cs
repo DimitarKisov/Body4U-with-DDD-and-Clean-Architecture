@@ -2,6 +2,7 @@
 {
     using Body4U.Application.Common;
     using Body4U.Application.Contracts;
+    using Body4U.Application.Features.Articles.Commands.Edit;
     using Body4U.Application.Features.Articles.Queries.Get;
     using Body4U.Application.Features.Articles.Queries.Search;
     using Body4U.Domain.Models.Articles;
@@ -15,5 +16,7 @@
         Task<Result<SearchArticlesOutputModel>> Search(SearchArticlesQuery request, CancellationToken cancellationToken);
 
         Task<Result<GetArticleOutputModel>> Get(int id, CancellationToken cancellationToken);
+
+        Task<Result> Edit(EditArticleCommand request, string loggedInUserId, int loggedInTrainerId, CancellationToken cancellationToken);
     }
 }

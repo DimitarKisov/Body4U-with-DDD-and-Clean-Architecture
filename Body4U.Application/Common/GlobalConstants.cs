@@ -12,6 +12,7 @@
             public const string Desc = "desc";
             public const string Asc = "asc";
             public const string FileIsEmpty = "File is empty.";
+            public const string WrongRights = "You don't have right for this action.";
         }
 
         public class Account
@@ -56,7 +57,7 @@
             public const string ArticleTitleExsists = "There is already an article with this title.";
             public const string NotReadyToWriteArticle = "Моля попълнете нужната информация за Вас, за да можете, да създадете статия.";
             public const string WrongImageWidthHeight = "Моля въведете снимка с размери минимум 730x548.";
-            public const string ArticleMissing = "Не съществува статия с такъв номер.";
+            public const string ArticleMissing = "There is no such article.";
             public const string WrongImageFormat = "Wrong image format. Choose a file format '.jpg', '.jpeg' or '.png'";
             public const string WrongArticleType = "Wrong article type.";
         }

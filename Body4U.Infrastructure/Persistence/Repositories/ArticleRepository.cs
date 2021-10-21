@@ -2,16 +2,20 @@
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Articles;
+    using Body4U.Application.Features.Articles.Commands.Edit;
     using Body4U.Application.Features.Articles.Queries.Get;
     using Body4U.Application.Features.Articles.Queries.Search;
     using Body4U.Domain.Models.Articles;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Serilog;
     using System;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
+    using static Body4U.Application.Common.GlobalConstants.Article;
     using static Body4U.Application.Common.GlobalConstants.System;
 
     internal class ArticleRepository : DataRepository<Article>, IArticleRepository
@@ -149,5 +153,70 @@
                 return Result<GetArticleOutputModel>.Failure(string.Format(Wrong, nameof(this.Get)));
             }
         }
+
+        public async Task<Result> Edit(EditArticleCommand request, string loggedInUserId, int loggedInTrainerId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var article = await this.Data.Articles.FindAsync(new object[] { request.Id }, cancellationToken);
+                if (article == null)
+                {
+                    return Result.Failure(ArticleMissing);
+                }
+
+                if (request.TrainerId != loggedInTrainerId)
+                {
+                    return Result.Failure(WrongRights);
+                }
+
+                if (request.Image.ContentType != "image/jpeg" && request.Image.ContentType != "image/png")
+                {
+                    return Result.Failure(WrongImageFormat);
+                }
+
+                var imageResult = this.ImageConverter(request.Image);
+                if (!imageResult.Succeeded)
+                {
+                    return Result.Failure(imageResult.Errors);
+                }
+
+                article
+                    .UpdateTitle(request.Title, loggedInUserId)
+                    .UpdateContent(request.Content, loggedInUserId)
+                    .UpdateImage(imageResult.Data, loggedInUserId)
+                    .UpdateSources(request.Sources, loggedInUserId);
+
+                return Result.Success;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(ArticleRepository)}.{nameof(this.Edit)}", ex);
+                return Result.Failure(string.Format(Wrong, nameof(this.Edit)));
+            }
+        }
+
+        #region Private methods
+        private Result<byte[]> ImageConverter(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return Result<byte[]>.Failure(FileIsEmpty);
+            }
+            else if (file != null && file.ContentType != "image/jpeg" && file.ContentType != "image/png")
+            {
+                return Result<byte[]>.Failure(WrongImageFormat);
+            }
+
+            var result = new byte[file!.Length];
+
+            using (var stream = new MemoryStream())
+            {
+                file.CopyTo(stream);
+                result = stream.ToArray();
+            }
+
+            return Result<byte[]>.SuccessWith(result);
+        }
+        #endregion
     }
 }
