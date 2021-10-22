@@ -5,7 +5,7 @@
     using Body4U.Application.Features.Administration.Queries.Common;
     using Body4U.Application.Features.Administration.Queries.SearchRoles;
     using Body4U.Application.Features.Administration.Queries.SearchUsers;
-    using Body4U.Application.Features.Identity.Queries;
+    using Body4U.Application.Features.Identity.Queries.MyProfile;
     using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;

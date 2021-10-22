@@ -1,4 +1,4 @@
-﻿namespace Body4U.Application.Features.Identity.Queries
+﻿namespace Body4U.Application.Features.Identity.Queries.MyProfile
 {
     using Body4U.Application.Common;
     using Body4U.Application.Contracts;

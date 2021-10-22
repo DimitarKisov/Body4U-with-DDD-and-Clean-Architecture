@@ -1,4 +1,4 @@
-﻿namespace Body4U.Application.Features.Identity.Queries
+﻿namespace Body4U.Application.Features.Identity.Queries.MyProfile
 {
     public class MyProfileOutputModel
     {
@@ -10,8 +10,7 @@
             string? profilePicture,
             int age,
             string phoneNumber,
-            int gender,
-            int? trainerId)
+            int gender)
         {
             this.Id = id;
             this.FirstName = firstName;
@@ -21,7 +20,6 @@
             this.Age = age;
             this.PhoneNumber = phoneNumber;
             this.Gender = gender;
-            this.TrainerId = trainerId;
         }
 
         public string Id { get; }
@@ -39,7 +37,5 @@
         public string PhoneNumber { get; }
 
         public int Gender { get; }
-
-        public int? TrainerId { get; }
     }
 }

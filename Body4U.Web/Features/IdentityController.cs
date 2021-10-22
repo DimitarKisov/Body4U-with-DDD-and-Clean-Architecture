@@ -11,7 +11,7 @@
     using Body4U.Application.Features.Identity.Commands.ResetPassword;
     using Body4U.Application.Features.Identity.Commands.SendEmail;
     using Body4U.Application.Features.Identity.Commands.VerifyEmail;
-    using Body4U.Application.Features.Identity.Queries;
+    using Body4U.Application.Features.Identity.Queries.MyProfile;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;

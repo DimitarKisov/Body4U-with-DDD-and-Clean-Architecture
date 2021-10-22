@@ -5,7 +5,7 @@
     using Body4U.Application.Features.Administration.Queries.SearchRoles;
     using Body4U.Application.Features.Administration.Queries.SearchUsers;
     using Body4U.Application.Features.Identity;
-    using Body4U.Application.Features.Identity.Queries;
+    using Body4U.Application.Features.Identity.Queries.MyProfile;
     using Microsoft.EntityFrameworkCore;
     using Serilog;
     using System;
@@ -31,7 +31,7 @@
         {
             try
             {
-                var user = await this.Data.Users.Include(x => x.Trainer).FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+                var user = await this.Data.Users.FindAsync(new object[] { userId }, cancellationToken);
 
                 if (user == null)
                 {
@@ -51,8 +51,7 @@
                         profilePicture,
                         user.Age,
                         user.PhoneNumber,
-                        user.Gender.Value,
-                        user.Trainer != null ? user.Trainer.Id : default!));
+                        user.Gender.Value));
             }
             catch (Exception ex)
             {

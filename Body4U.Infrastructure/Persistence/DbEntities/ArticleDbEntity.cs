@@ -9,11 +9,24 @@
             byte[] image,
             string content,
             string? sources,
-            ArticleType articleType)
+            ArticleType articleType,
+            int trainerId)
             : base(title, image, content, sources, articleType)
         {
+            this.TrainerId = trainerId;
         }
 
-        public int TrainerId { get; private set; }
+        private ArticleDbEntity(
+            string title,
+            byte[] image,
+            string content,
+            string? sources,
+            int trainerId)
+            : base(title, image, content, sources)
+        {
+            this.TrainerId = trainerId;
+        }
+
+        public int TrainerId { get; }
     }
 }

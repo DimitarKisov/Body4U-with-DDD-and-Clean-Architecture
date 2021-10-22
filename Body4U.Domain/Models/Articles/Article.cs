@@ -27,7 +27,7 @@
             this.ModifiedBy = null;
         }
 
-        private Article(
+        protected Article(
             string title,
             byte[] image,
             string content,
