@@ -2,6 +2,7 @@
 {
     using Body4U.Application.Common;
     using Body4U.Application.Features.Trainers.Commands.EditTrainer;
+    using Body4U.Application.Features.Trainers.Queries.MyArticles;
     using Body4U.Application.Features.Trainers.Queries.MyTrainerProfile;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,16 @@
 
         [HttpPost]
         [Authorize(Roles = TrainerRoleName)]
+        [Route(nameof(MyArticles))]
+        public async Task<ActionResult<MyArticlesOutputModel>> MyArticles([FromQuery] MyArticlesQuery query)
+            => await this.Send(query);
+
+        [HttpPost]
+        [Authorize(Roles = TrainerRoleName)]
         [Route(nameof(Edit))]
         public async Task<ActionResult<Result>> Edit(EditTrainerCommand command)
             => await this.Send(command);
 
-        //TODO: MyArticle и MyPhotos; Проверка на всички останали TODO-та и приключване
+        //TODO: MyArticle и MyPhotos;
     }
 }

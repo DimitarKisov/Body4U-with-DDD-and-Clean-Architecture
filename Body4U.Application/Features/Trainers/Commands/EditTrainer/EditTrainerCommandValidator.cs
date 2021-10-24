@@ -6,11 +6,11 @@
     {
         public EditTrainerCommandValidator()
         {
-            this.RuleFor(x => x.UserId)
-                .NotEmpty();
+            //this.RuleFor(x => x.UserId)
+            //    .NotEmpty();
 
-            this.RuleFor(x => x.UserId)
-                .NotEmpty();
+            //this.RuleFor(x => x.UserId)
+            //    .NotEmpty();
         }
     }
 }

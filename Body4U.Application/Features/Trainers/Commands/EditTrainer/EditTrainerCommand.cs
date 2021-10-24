@@ -1,6 +1,7 @@
 ﻿namespace Body4U.Application.Features.Trainers.Commands.EditTrainer
 {
     using Body4U.Application.Common;
+    using Body4U.Application.Contracts;
     using MediatR;
     using System.Threading;
     using System.Threading.Tasks;
@@ -8,16 +9,12 @@
     public class EditTrainerCommand : IRequest<Result>
     {
         public EditTrainerCommand(
-            int trainerId,
-            string userId,
-            string bio,
-            string shortBio,
-            string facebookUrl,
-            string instagramUrl,
-            string youtubeChannelUrl)
+            string? bio,
+            string? shortBio,
+            string? facebookUrl,
+            string? instagramUrl,
+            string? youtubeChannelUrl)
         {
-            this.TrainerId = trainerId;
-            this.UserId = userId;
             this.Bio = bio;
             this.ShortBio = shortBio;
             this.FacebookUrl = facebookUrl;
@@ -25,43 +22,43 @@
             this.YoutubeChannelUrl = youtubeChannelUrl;
         }
 
-        public int TrainerId { get; }
+        public string? Bio { get; }
 
-        public string UserId { get; }
+        public string? ShortBio { get; }
 
-        public string Bio { get; }
+        public string? FacebookUrl { get; }
 
-        public string ShortBio { get; }
+        public string? InstagramUrl { get; }
 
-        public string FacebookUrl { get; }
-
-        public string InstagramUrl { get; }
-
-        public string YoutubeChannelUrl { get; }
+        public string? YoutubeChannelUrl { get; }
 
         public class EditTrainerCommandHandler : IRequestHandler<EditTrainerCommand, Result>
         {
             private readonly ITrainerRepository trainerRepository;
+            private readonly ICurrentUserService currentUserService;
 
-            public EditTrainerCommandHandler(ITrainerRepository trainerRepository)
+            public EditTrainerCommandHandler(
+                ITrainerRepository trainerRepository,
+                ICurrentUserService currentUserService)
             {
                 this.trainerRepository = trainerRepository;
+                this.currentUserService = currentUserService;
             }
 
             public async Task<Result> Handle(EditTrainerCommand request, CancellationToken cancellationToken)
             {
-                var trainerResult = await this.trainerRepository.Find(request.TrainerId, cancellationToken);
+                var trainerResult = await this.trainerRepository.Find((int)currentUserService.TrainerId!, cancellationToken);
                 if (!trainerResult.Succeeded)
                 {
                     return trainerResult;
                 }
 
                 trainerResult.Data
-                    .UpdateBio(request.Bio, request.UserId)
-                    .UpdateShortBio(request.ShortBio, request.UserId)
-                    .UpdateFacebookUrl(request.FacebookUrl, request.UserId)
-                    .UpdateInstagramUrl(request.InstagramUrl, request.UserId)
-                    .UpdateYoutubeChannelUrl(request.YoutubeChannelUrl, request.UserId);
+                    .UpdateBio(request.Bio!, currentUserService.UserId)
+                    .UpdateShortBio(request.ShortBio!, currentUserService.UserId)
+                    .UpdateFacebookUrl(request.FacebookUrl!, currentUserService.UserId)
+                    .UpdateInstagramUrl(request.InstagramUrl!, currentUserService.UserId)
+                    .UpdateYoutubeChannelUrl(request.YoutubeChannelUrl!, currentUserService.UserId);
 
                 if (trainerResult.Data.Bio != null &&
                     trainerResult.Data.ShortBio != null &&

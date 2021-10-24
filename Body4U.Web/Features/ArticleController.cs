@@ -15,7 +15,7 @@
         [HttpPost]
         [Authorize(Roles = TrainerRoleName)]
         [Route(nameof(Create))]
-        public async Task<ActionResult<CreateArticleOutputModel>> Create(CreateArticleCommand command)
+        public async Task<ActionResult<CreateArticleOutputModel>> Create([FromForm] CreateArticleCommand command)
             => await this.Send(command);
 
         [HttpPost]

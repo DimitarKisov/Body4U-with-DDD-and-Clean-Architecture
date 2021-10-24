@@ -31,6 +31,13 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasMaxLength(25000);
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("Image")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -57,6 +64,8 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     b.HasIndex("TrainerId");
 
                     b.ToTable("Articles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Article");
                 });
 
             modelBuilder.Entity("Body4U.Domain.Models.Trainers.Trainer", b =>
@@ -67,16 +76,13 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Bio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
                     b.Property<string>("FacebookUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("InstagramUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsReadyToVisualize")
@@ -96,12 +102,10 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ShortBio")
-                        .IsRequired()
                         .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("YoutubeChannelUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -383,6 +387,13 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Body4U.Infrastructure.Persistence.DbEntities.ArticleDbEntity", b =>
+                {
+                    b.HasBaseType("Body4U.Domain.Models.Articles.Article");
+
+                    b.HasDiscriminator().HasValue("ArticleDbEntity");
                 });
 
             modelBuilder.Entity("Body4U.Domain.Models.Articles.Article", b =>

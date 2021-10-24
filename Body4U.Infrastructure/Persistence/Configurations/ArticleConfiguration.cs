@@ -11,6 +11,9 @@
         public void Configure(EntityTypeBuilder<Article> builder)
         {
             builder
+                .ToTable("Articles");
+
+            builder
                 .HasKey(x => x.Id);
 
             builder

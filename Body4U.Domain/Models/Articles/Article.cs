@@ -52,7 +52,7 @@
 
         public string? Sources { get; private set; }
 
-        public DateTime CreatedOn { get; }
+        public DateTime CreatedOn { get; private set; }
 
         public DateTime? ModifiedOn { get; private set; }
 

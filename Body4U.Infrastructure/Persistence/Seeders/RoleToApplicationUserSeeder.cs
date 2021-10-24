@@ -14,7 +14,8 @@
     {
         private readonly IConfiguration configuration;
 
-        public RoleToApplicationUserSeeder(IConfiguration configuration) => this.configuration = configuration;
+        public RoleToApplicationUserSeeder(IConfiguration configuration)
+            => this.configuration = configuration;
 
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {

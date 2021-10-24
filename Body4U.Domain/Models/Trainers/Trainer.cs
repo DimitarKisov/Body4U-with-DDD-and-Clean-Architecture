@@ -58,11 +58,11 @@
 
         public string? ModifiedBy { get; private set; }
 
-        public IEnumerable<Article> Articles => this.articles.ToList().AsReadOnly();
+        public IReadOnlyCollection<Article> Articles => this.articles.ToList().AsReadOnly();
 
-        public IEnumerable<TrainerImage> TrainerImages => this.trainerImages.ToList().AsReadOnly();
+        public IReadOnlyCollection<TrainerImage> TrainerImages => this.trainerImages.ToList().AsReadOnly();
 
-        public IEnumerable<TrainerVideo> TrainerVideos => this.trainerVideos.ToList().AsReadOnly();
+        public IReadOnlyCollection<TrainerVideo> TrainerVideos => this.trainerVideos.ToList().AsReadOnly();
 
         #region State mutation methods
         public Trainer UpdateBio(string bio, string userId)

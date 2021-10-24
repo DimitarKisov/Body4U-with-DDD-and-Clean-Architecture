@@ -10,7 +10,8 @@
     {
         private readonly IConfiguration configuration;
 
-        public ApplicationDbContextSeeder(IConfiguration configuration) => this.configuration = configuration;
+        public ApplicationDbContextSeeder(IConfiguration configuration)
+            => this.configuration = configuration;
 
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
@@ -31,6 +32,7 @@
                     new ApplicationUserSeeder(configuration),
                     new RolesSeeder(),
                     new RoleToApplicationUserSeeder(configuration),
+                    new TriggersSeeder()
                 };
 
             foreach (var seeder in seeders)

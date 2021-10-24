@@ -2,31 +2,27 @@
 {
     using Body4U.Domain.Models.Articles;
 
-    public class ArticleDbEntity : Article
+    internal class ArticleDbEntity : Article
     {
         public ArticleDbEntity(
             string title,
             byte[] image,
             string content,
             string? sources,
-            ArticleType articleType,
-            int trainerId)
+            ArticleType articleType) 
             : base(title, image, content, sources, articleType)
         {
-            this.TrainerId = trainerId;
         }
 
         private ArticleDbEntity(
             string title,
             byte[] image,
             string content,
-            string? sources,
-            int trainerId)
+            string? sources)
             : base(title, image, content, sources)
         {
-            this.TrainerId = trainerId;
         }
 
-        public int TrainerId { get; }
+        public int TrainerId { get; private set; }
     }
 }

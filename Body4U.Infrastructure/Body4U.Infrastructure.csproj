@@ -14,6 +14,18 @@
     <Compile Remove="Persistence\Migrations\20211011210751_Initial.Designer.cs" />
     <Compile Remove="Persistence\Migrations\20211018162921_AddedTrainerNavPropToArticle.cs" />
     <Compile Remove="Persistence\Migrations\20211018162921_AddedTrainerNavPropToArticle.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211022201528_ss.cs" />
+    <Compile Remove="Persistence\Migrations\20211022201528_ss.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211023112324_fd.cs" />
+    <Compile Remove="Persistence\Migrations\20211023112324_fd.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211023125345_Initial.cs" />
+    <Compile Remove="Persistence\Migrations\20211023125345_Initial.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211023132800_ChangedDescriminatorColumnInArticle.cs" />
+    <Compile Remove="Persistence\Migrations\20211023132800_ChangedDescriminatorColumnInArticle.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211023155248_Initial2.cs" />
+    <Compile Remove="Persistence\Migrations\20211023155248_Initial2.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20211024142934_test.cs" />
+    <Compile Remove="Persistence\Migrations\20211024142934_test.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +42,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Body4U.Application\Body4U.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Persistence\Migrations\" />
   </ItemGroup>
 
 </Project>

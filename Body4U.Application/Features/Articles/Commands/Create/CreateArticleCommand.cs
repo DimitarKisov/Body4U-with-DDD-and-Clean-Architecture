@@ -19,29 +19,15 @@
 
     public class CreateArticleCommand : IRequest<Result<CreateArticleOutputModel>>
     {
-        public CreateArticleCommand(
-            string title,
-            IFormFile image,
-            string content,
-            int articleType,
-            string sources)
-        {
-            this.Title = title;
-            this.Image = image;
-            this.Content = content;
-            this.ArticleType = articleType;
-            this.Sources = sources;
-        }
+        public string Title { get; set; } = default!;
 
-        public string Title { get; }
+        public IFormFile Image { get; set; } = default!;
 
-        public IFormFile Image { get; }
+        public string Content { get; set; } = default!;
 
-        public string Content { get; }
+        public int ArticleType { get; set; }
 
-        public int ArticleType { get; }
-
-        public string Sources { get; }
+        public string Sources { get; set; } = default!;
 
         public class CreateArticleCommandHandler : IRequestHandler<CreateArticleCommand, Result<CreateArticleOutputModel>>
         {

@@ -12,8 +12,8 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: false),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: false),
+                    Name = table.Column<string>(maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -73,9 +73,11 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     Image = table.Column<byte[]>(nullable: false),
                     Content = table.Column<string>(maxLength: 25000, nullable: false),
                     Sources = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: true),
                     ModifiedBy = table.Column<string>(nullable: true),
                     ArticleType_Value = table.Column<int>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
                     TrainerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -99,9 +101,9 @@ namespace Body4U.Infrastructure.Persistence.Migrations
                     Email = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: false),
-                    SecurityStamp = table.Column<string>(nullable: false),
-                    ConcurrencyStamp = table.Column<string>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),

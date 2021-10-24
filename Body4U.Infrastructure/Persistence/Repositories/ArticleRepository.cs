@@ -5,6 +5,7 @@
     using Body4U.Application.Features.Articles.Commands.Edit;
     using Body4U.Application.Features.Articles.Queries.Get;
     using Body4U.Application.Features.Articles.Queries.Search;
+    using Body4U.Application.Features.Trainers.Queries.MyArticles;
     using Body4U.Domain.Models.Articles;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
@@ -151,6 +152,71 @@
             {
                 Log.Error($"{nameof(ArticleRepository)}.{nameof(this.Get)}", ex);
                 return Result<GetArticleOutputModel>.Failure(string.Format(Wrong, nameof(this.Get)));
+            }
+        }
+
+        public async Task<Result<MyArticlesOutputModel>> MyArticles(MyArticlesQuery request, int trainerId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var articles = this.Data.Articles
+                    .Where(x => x.TrainerId == trainerId)
+                    .Select(x => new MyArticleOutputModel
+                    (
+                        x.Id,
+                        Convert.ToBase64String(x.Image),
+                        x.Title,
+                        x.Content,
+                        x.CreatedOn,
+                        x.ArticleType.Value
+                    ))
+                    .AsQueryable();
+
+                var totalRecords = await articles.CountAsync(cancellationToken);
+
+                var pageIndex = request.PageIndex;
+                var pageSize = request.PageSize;
+                var sortingOrder = request.OrderBy!;
+                var sortingField = request.SortBy!;
+
+                var orderBy = "Id";
+
+                if (!string.IsNullOrWhiteSpace(sortingField))
+                {
+                    if (sortingField.ToLower() == "title")
+                    {
+                        orderBy = nameof(request.Title);
+                    }
+                    else if (sortingField.ToLower() == "createdon")
+                    {
+                        orderBy = nameof(request.CreatedOn);
+                    }
+                    else if (sortingField.ToLower() == "articletype")
+                    {
+                        orderBy = nameof(request.ArticleType);
+                    }
+                }
+
+                if (sortingOrder != null && sortingOrder.ToLower() == Desc)
+                {
+                    articles = articles.OrderByDescending(x => orderBy);
+                }
+                else
+                {
+                    articles = articles.OrderBy(x => orderBy);
+                }
+
+                var data = await articles
+                 .Skip(pageIndex * pageSize)
+                 .Take(pageSize)
+                 .ToListAsync(cancellationToken);
+
+                return Result<MyArticlesOutputModel>.SuccessWith(new MyArticlesOutputModel(data, totalRecords));
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"{nameof(TrainerRepository)}.{nameof(this.MyArticles)}", ex);
+                return Result<MyArticlesOutputModel>.Failure(string.Format(Wrong, nameof(this.MyArticles)));
             }
         }
 
