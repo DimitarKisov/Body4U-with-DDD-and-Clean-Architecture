@@ -167,7 +167,7 @@
             catch (Exception ex)
             {
                 Log.Error($"{nameof(IdentityService)}.{nameof(this.ChangePassword)}", ex);
-                return Result<LoginOutputModel>.Failure(string.Format(Wrong, nameof(this.ChangePassword)));
+                return Result.Failure(string.Format(Wrong, nameof(this.ChangePassword)));
             }
         }
 
