@@ -34,41 +34,6 @@
             this.userManager = userManager;
         }
 
-        //public Result<GenerateRefreshTokenOutputModel> GenerateToken(IUser user)
-        //{
-        //    try
-        //    {
-        //        var castedUsed = user as ApplicationUser;
-        //        var tokenHandler = new JwtSecurityTokenHandler();
-        //        var configKey = this.configuration.GetSection("JwtSettings")["Secret"];
-        //        var key = Encoding.ASCII.GetBytes(configKey);
-
-        //        var tokenDescriptor = new SecurityTokenDescriptor
-        //        {
-        //            Subject = new ClaimsIdentity(new[]
-        //            {
-        //            new Claim(ClaimTypes.NameIdentifier, castedUsed!.Id),
-        //            new Claim(ClaimTypes.Name, castedUsed!.Email)
-        //        }),
-        //            Expires = DateTime.UtcNow.AddDays(7),
-        //            SigningCredentials = new SigningCredentials(
-        //                new SymmetricSecurityKey(key),
-        //                SecurityAlgorithms.HmacSha256Signature)
-        //        };
-
-        //        var token = tokenHandler.CreateToken(tokenDescriptor);
-        //        var encryptedToken = tokenHandler.WriteToken(token);
-
-        //        return Result<GenerateRefreshTokenOutputModel>.SuccessWith(new GenerateRefreshTokenOutputModel(encryptedToken));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error($"{nameof(JwtTokenGeneratorService)}.{nameof(this.GenerateToken)}", ex);
-        //        return Result<GenerateRefreshTokenOutputModel>.Failure(Wrong);
-        //    }
-
-        //}
-
         public async Task<Result<GenerateRefreshTokenOutputModel>> GenerateToken(IUser user)
         {
             try
